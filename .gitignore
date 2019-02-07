@@ -1,0 +1,12 @@
+# See https://help.github.com/ignore-files/ for more about ignoring files.
+
+*.iml
+.idea/
+target/
+*.jar
+*.class
+/.lein-*
+
+dev-configuration/*.edn
+resources/*.edn
+oph-configuration/*.edn

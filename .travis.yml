@@ -1,0 +1,38 @@
+sudo: required
+language: clojure
+jdk:
+  - oraclejdk8
+services:
+  - docker
+
+cache:
+  directories:
+  - $HOME/.m2
+
+env:
+  global:
+    # AWS_ACCESS_KEY_ID
+    - secure:
+    # AWS_SECRET_ACCESS_KEY
+    - secure:
+
+install:
+  - git clone https://github.com/Opetushallitus/ci-tools.git
+  - source ci-tools/common/setup-tools.sh
+
+script:
+  - lein ci-test
+  - lein uberjar
+
+  - mv target/uberjar/kouta-index-*-standalone.jar $DOCKER_BUILD_DIR/artifact/kouta-index.jar
+  - cp -vr oph-configuration $DOCKER_BUILD_DIR/config/
+
+  - export BASE_IMAGE="base-legacy:0.1"
+  - ./ci-tools/common/pull-image.sh
+  - ./ci-tools/build/build-fatjar.sh kouta-index
+
+deploy:
+  provider: script
+  script: ./ci-tools/build/upload-image.sh kouta-index
+  on:
+    all_branches: true
