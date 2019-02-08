@@ -21,3 +21,4 @@ tiedostoksi `dev-configuration/kouta-index.edn` ja lisää tiedostoon oikeat arv
 Sovelluksen voi käynnistää komennolla:
 
 `lein run`
+
