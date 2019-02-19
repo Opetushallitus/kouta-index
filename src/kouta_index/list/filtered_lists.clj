@@ -73,7 +73,7 @@
 (defn- ->tila-filter
   [lng filters]
   (when-let [tila (:tila filters)]
-    (->term-query :tila (->trimmed-lowercase tila))))
+    (->term-query :tila.keyword (->trimmed-lowercase tila))))
 
 (defn- ->filters
   [lng filters]
@@ -90,7 +90,7 @@
   [lng orgs filters]
   (let [filter-queries (->filters lng filters)]
     {:bool (-> { :must (->basic-query orgs) }
-               (cond-> (false? (:arkistoidut filters)) (assoc :must_not (->term-query :tila "arkistoitu")))
+               (cond-> (false? (:arkistoidut filters)) (assoc :must_not (->term-query :tila.keyword "arkistoitu")))
                (cond-> (not-empty filter-queries) (assoc :filter filter-queries)))}))
 
 (defn- ->query
