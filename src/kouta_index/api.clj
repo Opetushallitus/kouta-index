@@ -80,7 +80,7 @@
                          {order :- (describe String "asc/desc (asc)") "asc"}]
           (with-access-logging request (ok (l/filtered-haut-list organisaatio lng page size order-by order :nimi nimi :muokkaaja muokkaaja :tila tila :arkistoidut arkistoidut)))))
 
-      (context "/valintaperuste"
+      (comment context "/valintaperuste"                    ;TODO
                []
         :tags ["valintaperuste"]
         (GET "/filtered-list" [:as request]

@@ -1,4 +1,6 @@
 {
  :elastic-url "http://foo.org:9200"
  :elastic-timeout 120000
+ :organisaatio-service-url "https://virkailija.hahtuvaopintopolku.fi/organisaatio-service/rest/organisaatio/"
+ :log-elastic-queries false
 }

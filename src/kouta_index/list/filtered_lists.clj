@@ -2,8 +2,7 @@
   (:require
     [kouta-index.tools.search-utils :refer :all]
     [kouta-index.tools.generic-utils :refer :all]
-    [clojure.tools.logging :as log]
-    [cheshire.core :as cheshire]
+    [kouta-index.tools.logging-utils :refer [log-queries? debug-pretty]]
     [clj-elasticsearch.elastic-connect :as e]))
 
 (defonce default-source-fields ["oid", "nimi", "tila", "muokkaaja", "modified", "organisaatio", "count"])
@@ -99,13 +98,10 @@
     (->query-with-filters lng orgs filters)
     (->basic-query orgs)))
 
-(defn- debug-pretty
-  [json]
-  (log/info (cheshire/generate-string json {:pretty true})))
-
 (defn- ->result
   [response count-field]
-  (debug-pretty response)
+  (when log-queries?
+    (debug-pretty response))
   (let [hits (:hits response)
         total (:total hits)
         result (vec (map (fn [x] (-> x
@@ -123,7 +119,8 @@
         sort (->sort-array lng orgs count-field order-by order-direction)
         query (->query (->lng lng) orgs filters)
         script-fields (when count-field (->counter-script-field orgs count-field))]
-    (debug-pretty { :_source source :from from :size size :sort sort :query query :script_fields script-fields })
+    (when log-queries?
+      (debug-pretty { :_source source :from from :size size :sort sort :query query :script_fields script-fields }))
     (let [response (if count-field
                      (e/search index index :_source source :from from :size size :sort sort :query query :script_fields script-fields)
                      (e/search index index :_source source :from from :size size :sort sort :query query))]
