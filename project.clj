@@ -22,9 +22,7 @@
                  [environ "1.1.0"]
                  [cprop "0.1.13"]
                  ; Elasticsearch
-                 [oph/clj-elasticsearch "0.2.0-SNAPSHOT"]
-                 ;[org.scala-lang/scala-compiler "2.9.1"]
-                 ]
+                 [oph/clj-elasticsearch "0.2.0-SNAPSHOT"]]
   :ring {:handler kouta-index.api/app
          :init kouta-index.api/init
          ;:destroy kouta-index.core/destroy
@@ -33,17 +31,11 @@
   :jvm-opts ["-Dlog4j.configurationFile=test/resources/log4j2.properties" "-Dconf=dev-configuration/kouta-index.edn"]
   :target-path "target/%s"
   :plugins [[lein-ring "0.12.4"]
-            [lein-environ "1.1.0"]
-            ;[lein-scalac "0.1.0"]
-            ]
-  ;:scala-source-path "test/fixture"
+            [lein-environ "1.1.0"]]
   :profiles {:dev {:plugins [[lein-cloverage "1.0.11" :exclusions [org.clojure/clojure]]]}
              :test {:dependencies [[ring/ring-mock "0.3.2"]
                                    [konfo-indeksoija-service "0.1.0-SNAPSHOT"]
-                                   [konfo-indeksoija-service "0.1.0-SNAPSHOT" :classifier "tests"]
                                    [oph/clj-test-utils "0.2.0-SNAPSHOT"]
-                                   ;[org.scala-lang/scala-library "2.12.6"]
-                                   ;[org.json4s/json4s-jackson_2.12 "3.5.2"]
                                    [fi.oph.kouta/kouta-backend "0.1-SNAPSHOT"]
                                    [fi.oph.kouta/kouta-backend "0.1-SNAPSHOT" :classifier "tests"]]}
              :ci-test {:dependencies [[ring/ring-mock "0.3.2"]] :jvm-opts ["-Dlog4j.configurationFile=test/resources/log4j2.properties" "-Dconf=ci-configuration/kouta-index.edn"]}
