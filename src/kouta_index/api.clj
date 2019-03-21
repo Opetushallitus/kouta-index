@@ -59,7 +59,7 @@
                          {page :- (describe Long "Sivunumero (1)") 1}
                          {size :- (describe Long "Sivun koko (10)") 10}
                          {lng :- (describe String "fi/sv/en (fi)") "fi"}
-                         {order-by :- (describe String "nimi/tila/muokkaaja/modified/haut (nimi)") "nimi"}
+                         {order-by :- (describe String "nimi/tila/muokkaaja/modified/hakukohteet (nimi)") "nimi"}
                          {order :- (describe String "asc/desc (asc)") "asc"}]
           (with-access-logging request (ok (l/filtered-toteutukset-list organisaatio lng page size order-by order :nimi nimi :muokkaaja muokkaaja :tila tila :arkistoidut arkistoidut)))))
 

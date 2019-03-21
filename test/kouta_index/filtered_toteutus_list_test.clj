@@ -11,10 +11,6 @@
 
 (use-fixtures :each utils/mock-embedded-elasticsearch-fixture fixture/mock-indexing-fixture)
 
-(defn enc
-  [str]
-  (URLEncoder/encode str))
-
 (defn get-200
   [url]
   (let [response (app (mock/request :get url))]
@@ -42,6 +38,13 @@
     (fixture/add-toteutus-mock toteutusOid3 "1.2.246.562.13.0000001" :tila "julkaistu"   :nimi "Autoalan perusopinnot" :modified "2018-05-05T12:02" :muokkaaja "5.5.5.5")
     (fixture/add-toteutus-mock toteutusOid4 "1.2.246.562.13.0000001" :tila "arkistoitu"  :nimi "Autoalan perusopinnot" :modified "2018-06-05T12:02")
     (fixture/add-toteutus-mock toteutusOid5 "1.2.246.562.13.0000001" :tila "tallennettu" :nimi "Autoalan perusopinnot" :modified "2018-06-05T12:02")
+
+    (fixture/add-hakukohde-mock "1.2.246.562.20.000001" toteutusOid4 "1.2.246.562.29.0000001" :valintaperuste "31972648-ebb7-4185-ac64-31fa6b841e34")
+    (fixture/add-hakukohde-mock "1.2.246.562.20.000002" toteutusOid3 "1.2.246.562.29.0000001" :valintaperuste "31972648-ebb7-4185-ac64-31fa6b841e34")
+    (fixture/add-hakukohde-mock "1.2.246.562.20.000003" toteutusOid3 "1.2.246.562.29.0000002" :valintaperuste "31972648-ebb7-4185-ac64-31fa6b841e34")
+    (fixture/add-hakukohde-mock "1.2.246.562.20.000004" toteutusOid3 "1.2.246.562.29.0000003" :valintaperuste "31972648-ebb7-4185-ac64-31fa6b841e34")
+
+    (fixture/add-valintaperuste-mock "31972648-ebb7-4185-ac64-31fa6b841e34")
 
     (fixture/index-oids-without-related-indices {:toteutukset [toteutusOid1 toteutusOid2 toteutusOid3 toteutusOid4 toteutusOid5]})
 
@@ -87,12 +90,12 @@
       (testing "by nimi desc"
         (let [oids (get-200-oids (str (toteutus-url) "&tila=julkaistu&order-by=nimi&order=desc"))]
           (is (= [toteutusOid2 toteutusOid3] oids))))
-      (comment testing "by hakukohde count asc"
-        (let [oids (get-200-oids (str (toteutus-url) "&order-by=toteutukset&order=asc"))]
-          (is (= [koulutusOid5 koulutusOid3 koulutusOid4 koulutusOid2] oids))))
-      (comment testing "by hakukohde count desc"
-        (let [oids (get-200-oids (str (toteutus-url) "&order-by=toteutukset&order=desc"))]
-          (is (= [koulutusOid2 koulutusOid4 koulutusOid5 koulutusOid3] oids))))
+      (testing "by hakukohde count asc"
+        (let [oids (get-200-oids (str (toteutus-url) "&order-by=hakukohteet&order=asc"))]
+          (is (= [toteutusOid5 toteutusOid2 toteutusOid4 toteutusOid3] oids))))
+      (testing "by hakukohde count desc"
+        (let [oids (get-200-oids (str (toteutus-url) "&order-by=hakukohteet&order=desc"))]
+          (is (= [toteutusOid3 toteutusOid4 toteutusOid5 toteutusOid2] oids))))
       (comment testing "by muokkaaja asc"                 ;TODO: muokkaajan nimi onr:stä / nimen mockaus
                (let [oids (get-200-oids (str (toteutus-url) "&tila=julkaistu&order-by=muokkaaja&order=asc"))]
                  (is (= [koulutusOid2 koulutusOid3] oids))))
@@ -132,7 +135,4 @@
                   :muokkaaja { :oid "5.5.5.5"
                               :nimi muokkaaja }
                   :modified "2018-05-05T12:02"
-                  :haut 0 } toteutus)))))                   ;TODO: hakukohteet
-
-
-    ))
+                  :hakukohteet 3 } toteutus)))))))
