@@ -61,7 +61,9 @@
   (when-let [nimi (:nimi filters)]
     (if (oid? nimi)
       (->term-query :oid.keyword nimi)
-      (->match-query (str "nimi." (->lng lng)) nimi))))
+      (if (uuid? nimi)
+        (->term-query :id.keyword nimi)
+        (->match-query (str "nimi." (->lng lng)) nimi)))))
 
 (defn- ->muokkaaja-filter
   [lng filters]
@@ -139,4 +141,4 @@
   (partial search "haku-kouta" default-source-fields "hakukohteet"))
 
 (def filtered-valintaperusteet-list
-  (partial search "valintaperuste-kouta" default-source-fields nil))
+  (partial search "valintaperuste-kouta" (conj (remove #(= % "oid") default-source-fields) "id") nil))
