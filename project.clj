@@ -3,8 +3,7 @@
   :repositories [["oph-releases" "https://artifactory.opintopolku.fi/artifactory/oph-sade-release-local"]
                  ["oph-snapshots" "https://artifactory.opintopolku.fi/artifactory/oph-sade-snapshot-local"]
                  ["ext-snapshots" "https://artifactory.opintopolku.fi/artifactory/ext-snapshot-local"]]
-  :managed-dependencies [[pl.allegro.tech/embedded-elasticsearch "2.10.0"]
-                         [org.flatland/ordered "1.5.7"]]
+  :managed-dependencies [[org.flatland/ordered "1.5.7"]]
   :dependencies [[org.clojure/clojure "1.10.0"]
                  ; Rest + server
                  [metosin/compojure-api "1.1.11"]
@@ -13,7 +12,7 @@
                  [ring/ring-jetty-adapter "1.7.1"]
                  [ring-cors "0.1.13"]
                  ; Logging
-                 [oph/clj-log "0.1.0-SNAPSHOT"]
+                 [oph/clj-log "0.2.3-SNAPSHOT"]
                  [oph/clj-test-utils "0.1.0-SNAPSHOT"]
                  [org.clojure/tools.logging "0.4.1"]
                  [org.apache.logging.log4j/log4j-api "2.11.1"]
@@ -25,7 +24,7 @@
                  [environ "1.1.0"]
                  [cprop "0.1.13"]
                  ; Elasticsearch
-                 [oph/clj-elasticsearch "0.1.0-SNAPSHOT"]]
+                 [oph/clj-elasticsearch "0.2.2-SNAPSHOT"]]
   :ring {:handler kouta-index.api/app
          :init kouta-index.api/init
          ;:destroy kouta-index.core/destroy
