@@ -21,7 +21,7 @@
 
 (def kouta-index-api
   (api
-    {:swagger {:ui   "/kouta-index"
+    {:swagger {:ui   "/kouta-index/swagger"
                :spec "/kouta-index/swagger.json"
                :data {:info {:title       "Kouta-index"
                              :description "Backend for serving indexed kouta data for virkailija services."}}}}

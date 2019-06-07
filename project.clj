@@ -28,7 +28,7 @@
   :ring {:handler kouta-index.api/app
          :init kouta-index.api/init
          ;:destroy kouta-index.core/destroy
-         :browser-uri "kouta-index"}
+         :browser-uri "kouta-index/swagger"}
   :env {:name "kouta-index"}
   :jvm-opts ["-Dlog4j.configurationFile=test/resources/log4j2.properties" "-Dconf=dev-configuration/kouta-index.edn"]
   :target-path "target/%s"
