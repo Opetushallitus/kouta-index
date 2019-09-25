@@ -35,7 +35,13 @@
   :plugins [[lein-ring "0.12.4"]
             [lein-environ "1.1.0"]]
   :profiles {:dev {:plugins [[lein-cloverage "1.0.11" :exclusions [org.clojure/clojure]]]}
-             :test {:dependencies [[ring/ring-mock "0.3.2"]]}
+             :test {:dependencies [[ring/ring-mock "0.3.2"]
+                                   [kouta-indeksoija-service "0.1.5-SNAPSHOT"]
+                                   [fi.oph.kouta/kouta-backend "0.4-SNAPSHOT"]
+                                   [fi.oph.kouta/kouta-backend "0.4-SNAPSHOT" :classifier "tests"]
+                                   [oph/clj-test-utils "0.2.2-SNAPSHOT"]]
+                    :injections [(require '[clj-test-utils.elasticsearch-mock-utils :as utils])
+                                 (utils/global-elasticsearch-fixture)]}
              :ci-test {:dependencies [[ring/ring-mock "0.3.2"]] :jvm-opts ["-Dlog4j.configurationFile=test/resources/log4j2.properties" "-Dconf=ci-configuration/kouta-index.edn"]}
              :uberjar {:ring {:port 8080}}}
   :aliases {"run" ["ring" "server" "3006"]

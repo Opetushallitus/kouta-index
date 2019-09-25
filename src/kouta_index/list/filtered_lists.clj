@@ -135,7 +135,7 @@
   (partial search "koulutus-kouta" default-source-fields "toteutukset"))
 
 (def filtered-toteutukset-list
-  (partial search "toteutus-kouta" default-source-fields "haut"))
+  (partial search "toteutus-kouta" default-source-fields "hakukohteet"))
 
 (def filtered-haut-list
   (partial search "haku-kouta" default-source-fields "hakukohteet"))
