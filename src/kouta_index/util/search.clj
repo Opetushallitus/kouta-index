@@ -1,6 +1,6 @@
-(ns kouta-index.tools.search-utils
+(ns kouta-index.util.search
   (:require
-    [kouta-index.tools.generic-utils :refer [->trimmed-lowercase]]))
+    [kouta-index.util.tools :refer [->trimmed-lowercase]]))
 
 (defn ->order
   [order]

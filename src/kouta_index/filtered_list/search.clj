@@ -1,7 +1,8 @@
-(ns kouta-index.list.filtered-lists
+(ns kouta-index.filtered-list.search
   (:require
-    [kouta-index.tools.search-utils :refer :all]
-    [kouta-index.tools.generic-utils :refer :all]
+    [kouta-index.util.search :refer :all]
+    [kouta-index.util.tools :refer :all]
+    [kouta-index.rest.organisaatio :refer [with-children with-parents-and-children]]
     [clojure.tools.logging :as log]
     [cheshire.core :as cheshire]
     [clj-elasticsearch.elastic-connect :as e]))
@@ -17,39 +18,26 @@
              "modified"    "modified"
                            (str "nimi." (->lng lng) ".keyword"))))
 
-(defn- ->counter-script
-  [orgs nested-field]
-  (let [org-list  (clojure.string/join "," (map #(str "'" % "'") (comma-separated-string->vec orgs)))
-        script    (str "int count = 0;"
-                       "List oids = Arrays.asList(new String[] {" org-list "});"
-                         "for(int i = 0; i < params['_source']['" nested-field "'].getLength(); i++) {"
-                           "if(oids.contains(params['_source']['" nested-field "'].get(i).get('organisaatio').get('oid'))) {"
-                             "count++;"
-                           "}"
-                         "}"
-                       "return count;")]
-    { :script { :lang "painless" :inline script}}))
+(defn- ->count-script-field
+  [script]
+  { :count { :script { :lang "painless" :inline script}}})
 
-(defn- ->counter-script-field
-  [orgs nested-field]
-  { :count (->counter-script orgs nested-field)})
-
-(defn- ->counter-script-sort
-  [orgs nested-field order]
-  { :_script (merge { :type "number" :order (->order order) } (->counter-script orgs nested-field))})
+(defn- ->count-script-sort
+  [script order]
+  { :_script { :type "number" :order (->order order) :script { :lang "painless" :inline script}}})
 
 (defn- ->second-sort
-  [lng field]
-  (if (and field (= "nimi" (->trimmed-lowercase field)))
+  [lng order-by]
+  (if (and order-by (= "nimi" (->trimmed-lowercase order-by)))
     (->sort (->field-keyword lng "modified") "asc")
     (->sort (->field-keyword lng "nimi") "asc")))
 
 (defn- ->sort-array
-  [lng orgs count-field field order]
-  (let [first-sort (if (and count-field (= count-field field))
-                     (->counter-script-sort orgs field order)
-                     (->sort (->field-keyword lng field) order))]
-    [first-sort (->second-sort lng field) ]))
+  [lng script script-field order-by order]
+  (let [first-sort (if (and script-field (= script-field order-by))
+                     (->count-script-sort script order)
+                     (->sort (->field-keyword lng order-by) order))]
+    [first-sort (->second-sort lng order-by) ]))
 
 (defn- filters?
   [filters]
@@ -84,61 +72,52 @@
         tila      (->tila-filter lng filters)]
     (vec (remove nil? [nimi muokkaaja tila]))))
 
-(defn- ->basic-query
+(defn ->basic-org-query
   [orgs]
-  (->terms-query :organisaatio.oid (comma-separated-string->vec orgs)))
+  (->terms-query :organisaatio.oid (vec orgs)))
 
 (defn- ->query-with-filters
-  [lng orgs filters]
+  [lng base-query filters]
   (let [filter-queries (->filters lng filters)]
-    {:bool (-> { :must (->basic-query orgs) }
+    {:bool (-> { :must base-query }
                (cond-> (false? (:arkistoidut filters)) (assoc :must_not (->term-query :tila.keyword "arkistoitu")))
                (cond-> (not-empty filter-queries) (assoc :filter filter-queries)))}))
 
 (defn- ->query
-  [lng orgs filters]
+  [lng base-query filters]
   (if (filters? filters)
-    (->query-with-filters lng orgs filters)
-    (->basic-query orgs)))
+    (->query-with-filters lng base-query filters)
+    base-query))
 
 (defn- debug-pretty
   [json]
   (log/info (cheshire/generate-string json {:pretty true})))
 
 (defn- ->result
-  [response count-field]
+  [response script-field]
   (debug-pretty response)
+  (when (< 0 (-> response :_shards :failed))
+    (log/error (cheshire/generate-string (-> response :_shards :failures) {:pretty true})))
+
   (let [hits (:hits response)
         total (:total hits)
         result (vec (map (fn [x] (-> x
                                      :_source
-                                     (cond-> (not (nil? count-field)) (assoc (keyword count-field) (first (:count (:fields x))))))) (:hits hits)))]
+                                     (cond-> (not (nil? script-field)) (assoc (keyword script-field) (first (:count (:fields x))))))) (:hits hits)))]
     (-> {}
         (assoc :totalCount total)
         (assoc :result result))))
 
-(defn- search
-  [index source-fields count-field orgs lng page size order-by order-direction & {:as filters}]
+(defn search
+  [index source-fields base-query script script-field {:keys [lng page size order-by order] :or {lng "fi" page 1 size 10 order-by "nimi" order "asc"} :as filters}]
   (let [source (vec source-fields)
         from (->from page size)
         size (->size size)
-        sort (->sort-array lng orgs count-field order-by order-direction)
-        query (->query (->lng lng) orgs filters)
-        script-fields (when count-field (->counter-script-field orgs count-field))]
+        sort (->sort-array lng script script-field order-by order)
+        query (->query (->lng lng) base-query filters)
+        script-fields (when script-field (->count-script-field script))]
     (debug-pretty { :_source source :from from :size size :sort sort :query query :script_fields script-fields })
-    (let [response (if count-field
+    (let [response (if script-field
                      (e/search index index :_source source :from from :size size :sort sort :query query :script_fields script-fields)
                      (e/search index index :_source source :from from :size size :sort sort :query query))]
-      (->result response count-field))))
-
-(def filtered-koulutukset-list
-  (partial search "koulutus-kouta" default-source-fields "toteutukset"))
-
-(def filtered-toteutukset-list
-  (partial search "toteutus-kouta" default-source-fields "hakukohteet"))
-
-(def filtered-haut-list
-  (partial search "haku-kouta" default-source-fields "hakukohteet"))
-
-(def filtered-valintaperusteet-list
-  (partial search "valintaperuste-kouta" (conj (remove #(= % "oid") default-source-fields) "id") nil))
+      (->result response script-field))))

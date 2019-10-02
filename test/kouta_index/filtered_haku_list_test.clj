@@ -4,11 +4,12 @@
             [ring.mock.request :as mock]
             [clj-test-utils.elasticsearch-mock-utils :as utils]
             [kouta-indeksoija-service.fixture.kouta-indexer-fixture :as fixture]
+            [kouta-index.test-tools :as tools]
             [kouta-indeksoija-service.fixture.external-services :as mocks]))
 
 (intern 'clj-log.access-log 'service "kouta-index")
 
-(use-fixtures :each utils/mock-embedded-elasticsearch-fixture fixture/mock-indexing-fixture)
+(use-fixtures :each utils/mock-embedded-elasticsearch-fixture fixture/mock-indexing-fixture tools/mock-organisaatio)
 
 (defn get-200
   [url]
@@ -43,6 +44,9 @@
     (fixture/add-hakukohde-mock "1.2.246.562.20.000003" "1.2.246.562.17.000002" hakuOid3 :valintaperuste "31972648-ebb7-4185-ac64-31fa6b841e34")
     (fixture/add-hakukohde-mock "1.2.246.562.20.000004" "1.2.246.562.17.000002" hakuOid3 :valintaperuste "31972648-ebb7-4185-ac64-31fa6b841e34")
 
+    (fixture/add-toteutus-mock "1.2.246.562.17.000001" "1.2.246.562.13.000001" :tila "julkaistu")
+    (fixture/add-toteutus-mock "1.2.246.562.17.000002" "1.2.246.562.13.000002" :tila "julkaistu")
+
     (fixture/add-valintaperuste-mock "31972648-ebb7-4185-ac64-31fa6b841e34")
 
     (fixture/index-oids-without-related-indices {:haut [hakuOid1 hakuOid2 hakuOid3 hakuOid4 hakuOid5]})
@@ -51,9 +55,6 @@
       (testing "by organisaatio"
         (let [oids (get-200-oids (haku-url mocks/Oppilaitos2))]
           (is (= [hakuOid1] oids))))
-      (testing "by multiple organisaatiot"
-        (let [oids (get-200-oids (haku-url (str mocks/Oppilaitos1 "," mocks/Oppilaitos2)))]
-          (is (= [hakuOid3 hakuOid4 hakuOid5 hakuOid1 hakuOid2] oids))))
       (testing "by oid"
         (let [oids (get-200-oids (str (haku-url) "&nimi=" hakuOid2))]
           (is (= [hakuOid2] oids))))

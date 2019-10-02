@@ -4,12 +4,13 @@
       [ring.mock.request :as mock]
       [clj-test-utils.elasticsearch-mock-utils :as utils]
       [kouta-indeksoija-service.fixture.kouta-indexer-fixture :as fixture]
+      [kouta-index.test-tools :as tools]
       [kouta-indeksoija-service.fixture.external-services :as mocks])
   (:import (java.net URLEncoder)))
 
 (intern 'clj-log.access-log 'service "kouta-index")
 
-(use-fixtures :each utils/mock-embedded-elasticsearch-fixture fixture/mock-indexing-fixture)
+(use-fixtures :each utils/mock-embedded-elasticsearch-fixture fixture/mock-indexing-fixture tools/mock-organisaatio)
 
 (defn enc
   [str]
@@ -54,9 +55,6 @@
       (testing "by organisaatio"
         (let [oids (get-200-oids (koulutus-url mocks/Oppilaitos2))]
           (is (= [koulutusOid1] oids))))
-      (testing "by multiple organisaatiot"
-        (let [oids (get-200-oids (koulutus-url (str mocks/Oppilaitos1 "," mocks/Oppilaitos2)))]
-          (is (= [koulutusOid1 koulutusOid2 koulutusOid5 koulutusOid4 koulutusOid3] oids))))
       (testing "by oid"
         (let [oids (get-200-oids (str (koulutus-url) "&nimi=" koulutusOid2))]
           (is (= [koulutusOid2] oids))))
