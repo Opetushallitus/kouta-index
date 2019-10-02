@@ -1,4 +1,4 @@
-(defproject kouta-index "0.1.0-SNAPSHOT"
+(defproject kouta-index "0.1.1-SNAPSHOT"
   :description "Kouta-index"
   :repositories [["oph-releases" "https://artifactory.opintopolku.fi/artifactory/oph-sade-release-local"]
                  ["oph-snapshots" "https://artifactory.opintopolku.fi/artifactory/oph-sade-snapshot-local"]
@@ -36,9 +36,9 @@
             [lein-environ "1.1.0"]]
   :profiles {:dev {:plugins [[lein-cloverage "1.0.11" :exclusions [org.clojure/clojure]]]}
              :test {:dependencies [[ring/ring-mock "0.3.2"]
-                                   [kouta-indeksoija-service "0.1.5-SNAPSHOT"]
-                                   [fi.oph.kouta/kouta-backend "0.4-SNAPSHOT"]
-                                   [fi.oph.kouta/kouta-backend "0.4-SNAPSHOT" :classifier "tests"]
+                                   [kouta-indeksoija-service "0.1.7-SNAPSHOT"]
+                                   [fi.oph.kouta/kouta-backend "0.7-SNAPSHOT"]
+                                   [fi.oph.kouta/kouta-backend "0.7-SNAPSHOT" :classifier "tests"]
                                    [oph/clj-test-utils "0.2.2-SNAPSHOT"]]
                     :injections [(require '[clj-test-utils.elasticsearch-mock-utils :as utils])
                                  (utils/global-elasticsearch-fixture)]}
