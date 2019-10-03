@@ -57,6 +57,13 @@
       (testing "by tila"
         (let [ids (get-200-ids (str (valintaperuste-url) "&tila=tallennettu"))]
           (is (= [valintaperusteId5] ids))))
+      (testing "julkinen"
+        (fixture/update-valintaperuste-mock valintaperusteId2 :julkinen "true")
+        (fixture/index-oids-without-related-indices {:valintaperusteet [valintaperusteId2]})
+        (let [oids (get-200-ids (valintaperuste-url mocks/Oppilaitos2))]
+          (is (= [valintaperusteId1 valintaperusteId2] oids)))
+        (fixture/update-valintaperuste-mock valintaperusteId2 :julkinen "true")
+        (fixture/index-oids-without-related-indices {:valintaperusteet [valintaperusteId2]}))
       (testing "ei arkistoidut"
         (let [ids (get-200-ids (str (valintaperuste-url) "&arkistoidut=false"))]
           (is (= [valintaperusteId3 valintaperusteId5 valintaperusteId2] ids))))

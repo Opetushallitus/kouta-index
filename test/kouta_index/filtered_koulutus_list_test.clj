@@ -64,6 +64,13 @@
       (testing "by tila"
         (let [oids (get-200-oids (str (koulutus-url) "&tila=tallennettu"))]
           (is (= [koulutusOid5] oids))))
+      (testing "julkinen"
+        (fixture/update-koulutus-mock koulutusOid2 :julkinen "true")
+        (fixture/index-oids-without-related-indices {:koulutukset [koulutusOid2]})
+        (let [oids (get-200-oids (koulutus-url mocks/Oppilaitos2))]
+          (is (= [koulutusOid1 koulutusOid2] oids)))
+        (fixture/update-koulutus-mock koulutusOid2 :julkinen "true")
+        (fixture/index-oids-without-related-indices {:koulutukset [koulutusOid2]}))
       (testing "ei arkistoidut"
         (let [oids (get-200-oids (str (koulutus-url) "&arkistoidut=false&order-by=tila"))]
           (is (= [koulutusOid2 koulutusOid3 koulutusOid5] oids))))
