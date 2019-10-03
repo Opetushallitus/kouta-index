@@ -55,7 +55,7 @@
 
     (fixture/add-hakukohde-mock hakukohdeOid1 toteutusOid1 "1.2.246.562.29.0000001" :tila "julkaistu" :nimi "Hakukohde" :valintaperuste valintaperusteId1 :organisaatio mocks/Oppilaitos2)
     (fixture/add-hakukohde-mock hakukohdeOid2 toteutusOid4 "1.2.246.562.29.0000001" :tila "julkaistu" :nimi "Hakukohde" :valintaperuste valintaperusteId1)
-    (fixture/add-hakukohde-mock hakukohdeOid3 toteutusOid2 "1.2.246.562.29.0000001" :tila "julkaistu" :nimi "Autoalan hakukohde" :valintaperuste valintaperusteId1 :modified "2018-05-05T12:02" :muokkaaja "5.5.5.5")
+    (fixture/add-hakukohde-mock hakukohdeOid3 toteutusOid2 "1.2.246.562.29.0000001" :tila "julkaistu" :nimi "autoalan hakukohde" :valintaperuste valintaperusteId1 :modified "2018-05-05T12:02" :muokkaaja "5.5.5.5")
     (fixture/add-hakukohde-mock hakukohdeOid4 toteutusOid5 "1.2.246.562.29.0000001" :tila "arkistoitu" :nimi "Autoalan hakukohde" :valintaperuste valintaperusteId1 :modified "2018-06-05T12:02")
     (fixture/add-hakukohde-mock hakukohdeOid5 toteutusOid5 "1.2.246.562.29.0000001" :tila "tallennettu" :nimi "Autoalan hakukohde" :valintaperuste valintaperusteId1 :modified "2018-06-05T12:02")
 
@@ -131,8 +131,8 @@
               muokkaaja (:nimi (:muokkaaja hakukohde))]    ;TODO: muokkaajan nimi onr:stä / nimen mockaus
           (is (= {:oid hakukohdeOid3
                   :tila "julkaistu"
-                  :nimi { :fi "Autoalan hakukohde fi"
-                         :sv "Autoalan hakukohde sv" }
+                  :nimi { :fi "autoalan hakukohde fi"
+                         :sv "autoalan hakukohde sv" }
                   :organisaatio { :oid mocks/Oppilaitos1
                                  :nimi { :fi "Kiva ammattikorkeakoulu"
                                         :sv "Kiva ammattikorkeakoulu sv" }
