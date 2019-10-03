@@ -36,7 +36,7 @@
             [lein-environ "1.1.0"]]
   :profiles {:dev {:plugins [[lein-cloverage "1.0.11" :exclusions [org.clojure/clojure]]]}
              :test {:dependencies [[ring/ring-mock "0.3.2"]
-                                   [kouta-indeksoija-service "0.1.7-SNAPSHOT"]
+                                   [kouta-indeksoija-service "0.1.8-SNAPSHOT"]
                                    [fi.oph.kouta/kouta-backend "0.7-SNAPSHOT"]
                                    [fi.oph.kouta/kouta-backend "0.7-SNAPSHOT" :classifier "tests"]
                                    [oph/clj-test-utils "0.2.2-SNAPSHOT"]]
