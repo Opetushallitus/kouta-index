@@ -1,7 +1,6 @@
 (ns kouta-index.api
   (:require
     [kouta-index.config :refer [config]]
-    [kouta-index.util.logging :refer [debug-pretty]]
     [clj-log.access-log :refer [with-access-logging]]
     [compojure.api.sweet :refer :all]
     [ring.middleware.cors :refer [wrap-cors]]

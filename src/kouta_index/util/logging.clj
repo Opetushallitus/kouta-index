@@ -8,5 +8,5 @@
 
 (defn debug-pretty
   [json]
-  (when true
-    (println (cheshire/generate-string json {:pretty true}))))
+  (when log-queries?
+    (log/info (cheshire/generate-string json {:pretty true}))))

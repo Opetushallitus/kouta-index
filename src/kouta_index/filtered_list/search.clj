@@ -5,7 +5,8 @@
     [kouta-index.rest.organisaatio :refer [with-children with-parents-and-children]]
     [clojure.tools.logging :as log]
     [cheshire.core :as cheshire]
-    [clj-elasticsearch.elastic-connect :as e]))
+    [clj-elasticsearch.elastic-connect :as e]
+    [kouta-index.util.logging :refer [debug-pretty]]))
 
 (defonce default-source-fields ["oid", "nimi", "tila", "muokkaaja", "modified", "organisaatio", "count"])
 
@@ -88,10 +89,6 @@
   (if (filters? filters)
     (->query-with-filters lng base-query filters)
     base-query))
-
-(defn- debug-pretty
-  [json]
-  (log/info (cheshire/generate-string json {:pretty true})))
 
 (defn- ->result
   [response script-field]
