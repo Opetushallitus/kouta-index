@@ -1,0 +1,5 @@
+{
+ :elastic-url "http://127.0.0.1:9200"
+ :elastic-timeout 120000
+ :log-elastic-queries false
+}

@@ -9,7 +9,7 @@
     [ring.util.http-response :refer :all]
     [environ.core :refer [env]]
     [clojure.tools.logging :as log]
-    [kouta-index.list.filtered-lists :as l]))
+    [kouta-index.filtered-list.service :refer :all]))
 
 (defn init
   []
@@ -33,25 +33,25 @@
          []
          :tags ["koulutus"]
          (GET "/filtered-list" [:as request]
-              :summary "Listaa koulutusten perustiedot"
-              :query-params [organisaatio :- (describe String "Pilkulla eroteltu lista organisaatioiden oideja")
-                             {nimi :- (describe String "Suodata annetulla koulutuksen nimellä tai oidilla") nil}
-                             {muokkaaja :- (describe String "Suodata annetulla muokkaajan nimellä tai oidilla") nil}
-                             {tila :- (describe String "Suodata annetulla koulutuksen tilalla (julkaistu/tallennettu/arkistoitu)") nil}
-                             {arkistoidut :- (describe Boolean "Näytetäänkö arkistoidut koulutukset (false)") true}
-                             {page :- (describe Long "Sivunumero (1)") 1}
-                             {size :- (describe Long "Sivun koko (10)") 10}
-                             {lng :- (describe String "fi/sv/en (fi)") "fi"}
-                             {order-by :- (describe String "nimi/tila/muokkaaja/modified/toteutukset (nimi)") "nimi"}
-                             {order :- (describe String "asc/desc (asc)") "asc"}]
-              (with-access-logging request (ok (l/filtered-koulutukset-list organisaatio lng page size order-by order :nimi nimi :muokkaaja muokkaaja :tila tila :arkistoidut arkistoidut)))))
+           :summary "Listaa koulutusten perustiedot"
+           :query-params [organisaatio :- (describe String "Organisaation oid")
+                          {nimi :- (describe String "Suodata annetulla koulutuksen nimellä tai oidilla") nil}
+                          {muokkaaja :- (describe String "Suodata annetulla muokkaajan nimellä tai oidilla") nil}
+                          {tila :- (describe String "Suodata annetulla koulutuksen tilalla (julkaistu/tallennettu/arkistoitu)") nil}
+                          {arkistoidut :- (describe Boolean "Näytetäänkö arkistoidut koulutukset (false)") true}
+                          {page :- (describe Long "Sivunumero (1)") 1}
+                          {size :- (describe Long "Sivun koko (10)") 10}
+                          {lng :- (describe String "fi/sv/en (fi)") "fi"}
+                          {order-by :- (describe String "nimi/tila/muokkaaja/modified/toteutukset (nimi)") "nimi"}
+                          {order :- (describe String "asc/desc (asc)") "asc"} :as params]
+           (with-access-logging request (ok (search-koulutukset organisaatio params)))))
 
       (context "/toteutus"
                []
         :tags ["toteutus"]
         (GET "/filtered-list" [:as request]
           :summary "Listaa toteutusten perustiedot"
-          :query-params [organisaatio :- (describe String "Pilkulla eroteltu lista organisaatioiden oideja")
+          :query-params [organisaatio :- (describe String "Organisaation oid")
                          {nimi :- (describe String "Suodata annetulla toteutuksen nimellä tai oidilla") nil}
                          {muokkaaja :- (describe String "Suodata annetulla muokkaajan nimellä tai oidilla") nil}
                          {tila :- (describe String "Suodata annetulla toteutuksen tilalla (julkaistu/tallennettu/arkistoitu)") nil}
@@ -59,16 +59,16 @@
                          {page :- (describe Long "Sivunumero (1)") 1}
                          {size :- (describe Long "Sivun koko (10)") 10}
                          {lng :- (describe String "fi/sv/en (fi)") "fi"}
-                         {order-by :- (describe String "nimi/tila/muokkaaja/modified/haut (nimi)") "nimi"}
-                         {order :- (describe String "asc/desc (asc)") "asc"}]
-          (with-access-logging request (ok (l/filtered-toteutukset-list organisaatio lng page size order-by order :nimi nimi :muokkaaja muokkaaja :tila tila :arkistoidut arkistoidut)))))
+                         {order-by :- (describe String "nimi/tila/muokkaaja/modified/hakukohteet (nimi)") "nimi"}
+                         {order :- (describe String "asc/desc (asc)") "asc"} :as params]
+          (with-access-logging request (ok (search-toteutukset organisaatio params)))))
 
       (context "/haku"
                []
         :tags ["haku"]
         (GET "/filtered-list" [:as request]
           :summary "Listaa hakujen perustiedot"
-          :query-params [organisaatio :- (describe String "Pilkulla eroteltu lista organisaatioiden oideja")
+          :query-params [organisaatio :- (describe String "Organisaation oid")
                          {nimi :- (describe String "Suodata annetulla haun nimellä tai oidilla") nil}
                          {muokkaaja :- (describe String "Suodata annetulla muokkaajan nimellä tai oidilla") nil}
                          {tila :- (describe String "Suodata annetulla haun tilalla (julkaistu/tallennettu/arkistoitu)") nil}
@@ -77,15 +77,15 @@
                          {size :- (describe Long "Sivun koko (10)") 10}
                          {lng :- (describe String "fi/sv/en (fi)") "fi"}
                          {order-by :- (describe String "nimi/tila/muokkaaja/modified/hakukohteet (nimi)") "nimi"}
-                         {order :- (describe String "asc/desc (asc)") "asc"}]
-          (with-access-logging request (ok (l/filtered-haut-list organisaatio lng page size order-by order :nimi nimi :muokkaaja muokkaaja :tila tila :arkistoidut arkistoidut)))))
+                         {order :- (describe String "asc/desc (asc)") "asc"} :as params]
+          (with-access-logging request (ok (search-haut organisaatio params)))))
 
       (context "/valintaperuste"
                []
         :tags ["valintaperuste"]
         (GET "/filtered-list" [:as request]
           :summary "Listaa valintaperusteiden perustiedot"
-          :query-params [organisaatio :- (describe String "Pilkulla eroteltu lista organisaatioiden oideja")
+          :query-params [organisaatio :- (describe String "Organisaation oid")
                          {nimi :- (describe String "Suodata annetulla valintaperusteen nimellä tai oidilla") nil}
                          {muokkaaja :- (describe String "Suodata annetulla muokkaajan nimellä tai oidilla") nil}
                          {tila :- (describe String "Suodata annetulla valintaperusteen tilalla (julkaistu/tallennettu/arkistoitu)") nil}
@@ -94,8 +94,25 @@
                          {size :- (describe Long "Sivun koko (10)") 10}
                          {lng :- (describe String "fi/sv/en (fi)") "fi"}
                          {order-by :- (describe String "nimi/tila/muokkaaja/modified (nimi)") "nimi"}
-                         {order :- (describe String "asc/desc (asc)") "asc"}]
-          (with-access-logging request (ok (l/filtered-valintaperusteet-list organisaatio lng page size order-by order :nimi nimi :muokkaaja muokkaaja :tila tila :arkistoidut arkistoidut))))))))
+                         {order :- (describe String "asc/desc (asc)") "asc"} :as params]
+          (with-access-logging request (ok (search-valintaperusteet organisaatio params)))))
+
+      (context "/hakukohde"
+               []
+               :tags ["hakukohde"]
+               (GET "/filtered-list" [:as request]
+                 :summary "Listaa hakukohteiden perustiedot"
+                 :query-params [organisaatio :- (describe String "Organisaation oid")
+                                {nimi :- (describe String "Suodata annetulla hakukohteen nimellä tai oidilla") nil}
+                                {muokkaaja :- (describe String "Suodata annetulla muokkaajan nimellä tai oidilla") nil}
+                                {tila :- (describe String "Suodata annetulla haun tilalla (julkaistu/tallennettu/arkistoitu)") nil}
+                                {arkistoidut :- (describe Boolean "Näytetäänkö arkistoidut hakukohteet (false)") true}
+                                {page :- (describe Long "Sivunumero (1)") 1}
+                                {size :- (describe Long "Sivun koko (10)") 10}
+                                {lng :- (describe String "fi/sv/en (fi)") "fi"}
+                                {order-by :- (describe String "nimi/tila/muokkaaja/modified (nimi)") "nimi"}
+                                {order :- (describe String "asc/desc (asc)") "asc"} :as params]
+                 (with-access-logging request (ok (search-hakukohteet organisaatio params))))))))
 
 (def app
   (wrap-cors kouta-index-api :access-control-allow-origin [#".*"] :access-control-allow-methods [:get :post]))

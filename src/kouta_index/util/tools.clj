@@ -1,4 +1,4 @@
-(ns kouta-index.tools.generic-utils
+(ns kouta-index.util.tools
   (:import (java.util.regex Pattern)))
 
 (defonce oid-pattern  (Pattern/compile "^[\\d][\\d\\.]+[\\d]$"))
@@ -21,3 +21,6 @@
 (defn comma-separated-string->vec
   [string]
   (vec (map #(clojure.string/trim %) (clojure.string/split string #","))))
+
+(defn ->concatenated-vec
+  [])
