@@ -5,6 +5,8 @@
 
 (defrecord Oids [parents oid children])
 
+(defonce Oph "1.2.246.562.10.00000000001")
+
 (defn- get-organisaatio-with-children
   [oid]
   (-> (get->json-body (resolve-url :organisaatio-service.v4.hierarkia.hae)
@@ -24,12 +26,20 @@
   (when (seq children)
     (concat (map :oid children) (children-recursive (mapcat :children children)))))
 
+(defn- ->Oids
+  ([oid children parents]
+   (map->Oids { :parents (vec parents)
+               :oid oid
+               :children (vec children)}))
+  ([oid]
+   (->Oids oid [] [])))
+
 (defn get-oids
   [oid]
-  (let [organisaatio (get-organisaatio-with-children oid)]
-    (map->Oids { :parents (parents organisaatio)
-                 :oid oid
-                 :children (children-recursive (:children organisaatio))})))
+  (if (= oid Oph)
+    (->Oids Oph)
+    (let [organisaatio (get-organisaatio-with-children oid)]
+      (->Oids oid (children-recursive (:children organisaatio)) (parents organisaatio)))))
 
 (defn with-parents-and-children
   [oids]
