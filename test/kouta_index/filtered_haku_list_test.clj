@@ -23,15 +23,15 @@
 
 (deftest filtered-haku-list-test
 
-  (defn haku-url
-    ([org] (str "/kouta-index/haku/filtered-list?organisaatio=" org))
-    ([] (haku-url mocks/Oppilaitos1)))
-
   (let [hakuOid1 "1.2.246.562.29.0000001"
         hakuOid2 "1.2.246.562.29.0000002"
         hakuOid3 "1.2.246.562.29.0000003"
         hakuOid4 "1.2.246.562.29.0000004"
         hakuOid5 "1.2.246.562.29.0000005"]
+
+    (defn haku-url
+      ([oids] (str "/kouta-index/haku/filtered-list?oids=" oids))
+      ([] (haku-url (str hakuOid2 "," hakuOid3 "," hakuOid4 "," hakuOid5))))
 
     (fixture/add-haku-mock hakuOid1 :tila "julkaistu"   :nimi "Yhteishaku" :organisaatio mocks/Oppilaitos2)
     (fixture/add-haku-mock hakuOid2 :tila "julkaistu"   :nimi "Yhteishaku")
@@ -39,21 +39,21 @@
     (fixture/add-haku-mock hakuOid4 :tila "arkistoitu"  :nimi "Jatkuva haku" :modified "2018-06-05T12:02")
     (fixture/add-haku-mock hakuOid5 :tila "tallennettu" :nimi "Jatkuva haku" :modified "2018-06-05T12:02")
 
-    (fixture/add-hakukohde-mock "1.2.246.562.20.000001" "1.2.246.562.17.000001" hakuOid2 :valintaperuste "31972648-ebb7-4185-ac64-31fa6b841e34")
-    (fixture/add-hakukohde-mock "1.2.246.562.20.000002" "1.2.246.562.17.000002" hakuOid3 :valintaperuste "31972648-ebb7-4185-ac64-31fa6b841e34")
-    (fixture/add-hakukohde-mock "1.2.246.562.20.000003" "1.2.246.562.17.000002" hakuOid3 :valintaperuste "31972648-ebb7-4185-ac64-31fa6b841e34")
-    (fixture/add-hakukohde-mock "1.2.246.562.20.000004" "1.2.246.562.17.000002" hakuOid3 :valintaperuste "31972648-ebb7-4185-ac64-31fa6b841e34")
+    ;(fixture/add-hakukohde-mock "1.2.246.562.20.000001" "1.2.246.562.17.000001" hakuOid2 :valintaperuste "31972648-ebb7-4185-ac64-31fa6b841e34")
+    ;(fixture/add-hakukohde-mock "1.2.246.562.20.000002" "1.2.246.562.17.000002" hakuOid3 :valintaperuste "31972648-ebb7-4185-ac64-31fa6b841e34")
+    ;(fixture/add-hakukohde-mock "1.2.246.562.20.000003" "1.2.246.562.17.000002" hakuOid3 :valintaperuste "31972648-ebb7-4185-ac64-31fa6b841e34")
+    ;fixture/add-hakukohde-mock "1.2.246.562.20.000004" "1.2.246.562.17.000002" hakuOid3 :valintaperuste "31972648-ebb7-4185-ac64-31fa6b841e34")
 
-    (fixture/add-toteutus-mock "1.2.246.562.17.000001" "1.2.246.562.13.000001" :tila "julkaistu")
-    (fixture/add-toteutus-mock "1.2.246.562.17.000002" "1.2.246.562.13.000002" :tila "julkaistu")
+    ;(fixture/add-toteutus-mock "1.2.246.562.17.000001" "1.2.246.562.13.000001" :tila "julkaistu")
+    ;(fixture/add-toteutus-mock "1.2.246.562.17.000002" "1.2.246.562.13.000002" :tila "julkaistu")
 
-    (fixture/add-valintaperuste-mock "31972648-ebb7-4185-ac64-31fa6b841e34")
+    ;(fixture/add-valintaperuste-mock "31972648-ebb7-4185-ac64-31fa6b841e34")
 
     (fixture/index-oids-without-related-indices {:haut [hakuOid1 hakuOid2 hakuOid3 hakuOid4 hakuOid5]})
 
     (testing "Filter haku"
       (testing "by organisaatio"
-        (let [oids (get-200-oids (haku-url mocks/Oppilaitos2))]
+        (let [oids (get-200-oids (haku-url hakuOid1))]
           (is (= [hakuOid1] oids))))
       (testing "by oid"
         (let [oids (get-200-oids (str (haku-url) "&nimi=" hakuOid2))]
@@ -90,10 +90,10 @@
       (testing "by nimi desc"
         (let [oids (get-200-oids (str (haku-url) "&tila=julkaistu&order-by=nimi&order=desc"))]
           (is (= [hakuOid2 hakuOid3] oids))))
-      (testing "by hakukohde count asc"
+      (comment testing "by hakukohde count asc"
                (let [oids (get-200-oids (str (haku-url) "&order-by=hakukohteet&order=asc"))]
                  (is (= [hakuOid4 hakuOid5 hakuOid2 hakuOid3] oids))))
-      (testing "by hakukohde count desc"
+      (comment testing "by hakukohde count desc"
                (let [oids (get-200-oids (str (haku-url) "&order-by=hakukohteet&order=desc"))]
                  (is (= [hakuOid3 hakuOid2 hakuOid4 hakuOid5] oids))))
       (comment testing "by muokkaaja asc"                 ;TODO: muokkaajan nimi onr:stä / nimen mockaus
@@ -134,5 +134,4 @@
                                                       :sv "kunta_091 nimi sv" }}}
                   :muokkaaja { :oid "5.5.5.5"
                               :nimi muokkaaja }
-                  :modified "2018-05-05T12:02"
-                  :hakukohteet 3 } haku)))))))
+                  :modified "2018-05-05T12:02"} haku)))))))

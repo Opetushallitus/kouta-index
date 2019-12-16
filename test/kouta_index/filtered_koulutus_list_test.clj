@@ -28,15 +28,15 @@
 
 (deftest filtered-koulutus-list-test
 
-  (defn koulutus-url
-    ([org] (str "/kouta-index/koulutus/filtered-list?organisaatio=" org))
-    ([] (koulutus-url mocks/Oppilaitos1)))
-
   (let [koulutusOid1 "1.2.246.562.13.000001"
         koulutusOid2 "1.2.246.562.13.000002"
         koulutusOid3 "1.2.246.562.13.000003"
         koulutusOid4 "1.2.246.562.13.000004"
         koulutusOid5 "1.2.246.562.13.000005"]
+
+    (defn koulutus-url
+      ([oids] (str "/kouta-index/koulutus/filtered-list?oids=" oids))
+      ([] (koulutus-url (str koulutusOid2 "," koulutusOid3 "," koulutusOid4 "," koulutusOid5))))
 
     (fixture/add-koulutus-mock koulutusOid1 :tila "julkaistu" :nimi "Hauska koulutus" :organisaatio mocks/Oppilaitos2)
     (fixture/add-koulutus-mock koulutusOid2 :tila "julkaistu" :nimi "Tietojenkäsittelytieteen perusopinnot" :modified "2018-05-05T12:02")
@@ -44,16 +44,16 @@
     (fixture/add-koulutus-mock koulutusOid4 :tila "arkistoitu" :nimi "Tietojenkäsittelytieteen perusopinnot")
     (fixture/add-koulutus-mock koulutusOid5 :tila "tallennettu" :nimi "Tietojenkäsittelytieteen perusopinnot")
 
-    (fixture/add-toteutus-mock "1.2.246.562.17.000001" koulutusOid2 :tila "julkaistu")
-    (fixture/add-toteutus-mock "1.2.246.562.17.000002" koulutusOid2 :tila "julkaistu")
-    (fixture/add-toteutus-mock "1.2.246.562.17.000003" koulutusOid2 :tila "julkaistu")
-    (fixture/add-toteutus-mock "1.2.246.562.17.000004" koulutusOid4 :tila "julkaistu")
+    ;(fixture/add-toteutus-mock "1.2.246.562.17.000001" koulutusOid2 :tila "julkaistu")
+    ;(fixture/add-toteutus-mock "1.2.246.562.17.000002" koulutusOid2 :tila "julkaistu")
+    ;(fixture/add-toteutus-mock "1.2.246.562.17.000003" koulutusOid2 :tila "julkaistu")
+    ;(fixture/add-toteutus-mock "1.2.246.562.17.000004" koulutusOid4 :tila "julkaistu")
 
     (fixture/index-oids-without-related-indices {:koulutukset [koulutusOid1 koulutusOid2 koulutusOid3 koulutusOid4 koulutusOid5]})
 
     (testing "Filter koulutus"
       (testing "by organisaatio"
-        (let [oids (get-200-oids (koulutus-url mocks/Oppilaitos2))]
+        (let [oids (get-200-oids (koulutus-url koulutusOid1))]
           (is (= [koulutusOid1] oids))))
       (testing "by oid"
         (let [oids (get-200-oids (str (koulutus-url) "&nimi=" koulutusOid2))]
@@ -64,10 +64,10 @@
       (testing "by tila"
         (let [oids (get-200-oids (str (koulutus-url) "&tila=tallennettu"))]
           (is (= [koulutusOid5] oids))))
-      (testing "julkinen"
+      (comment testing "julkinen"
         (fixture/update-koulutus-mock koulutusOid2 :julkinen "true")
         (fixture/index-oids-without-related-indices {:koulutukset [koulutusOid2]})
-        (let [oids (get-200-oids (koulutus-url mocks/Oppilaitos2))]
+        (let [oids (get-200-oids (koulutus-url koulutusOid1))]
           (is (= [koulutusOid1 koulutusOid2] oids)))
         (fixture/update-koulutus-mock koulutusOid2 :julkinen "true")
         (fixture/index-oids-without-related-indices {:koulutukset [koulutusOid2]}))
@@ -97,10 +97,10 @@
       (testing "by desc desc"
         (let [oids (get-200-oids (str (koulutus-url) "&tila=julkaistu&order-by=nimi&order=desc"))]
           (is (= [koulutusOid3 koulutusOid2] oids))))
-      (testing "by toteutus count asc"
+      (comment testing "by toteutus count asc"
         (let [oids (get-200-oids (str (koulutus-url) "&order-by=toteutukset&order=asc"))]
           (is (= [koulutusOid5 koulutusOid3 koulutusOid4 koulutusOid2] oids))))
-      (testing "by toteutus count desc"
+      (comment testing "by toteutus count desc"
         (let [oids (get-200-oids (str (koulutus-url) "&order-by=toteutukset&order=desc"))]
           (is (= [koulutusOid2 koulutusOid4 koulutusOid5 koulutusOid3] oids))))
       (comment testing "by muokkaaja asc"                 ;TODO: muokkaajan nimi onr:stä / nimen mockaus
@@ -141,8 +141,7 @@
                                                           :sv "kunta_091 nimi sv" }}}
                    :muokkaaja { :oid "1.2.3"
                                 :nimi muokkaaja }
-                   :modified "2018-05-05T12:02"
-                   :toteutukset 3 } koulutus)))))
+                   :modified "2018-05-05T12:02"} koulutus)))))
 
 
       (comment testing "Filter koulutus by nimi" ;TODO Tämä eivät saisi feilata!

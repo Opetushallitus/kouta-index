@@ -25,14 +25,10 @@
 (defn get-200-oids
   [url]
   (let [result (:result (get-200 url))]
-    (println (cheshire.core/generate-string result {:pretty true}))
+    ;(println (cheshire.core/generate-string result {:pretty true}))
     (map #(:oid %) result)))
 
 (deftest filtered-hakukohde-list-test
-
-  (defn hakukohde-url
-    ([org] (str "/kouta-index/hakukohde/filtered-list?organisaatio=" org))
-    ([] (hakukohde-url mocks/Oppilaitos1)))
 
   (let [toteutusOid1 "1.2.246.562.17.0000001"
         toteutusOid2 "1.2.246.562.17.0000002"
@@ -46,6 +42,10 @@
         hakukohdeOid5 "1.2.246.562.20.0000005"
         valintaperusteId1 "31972648-ebb7-4185-ac64-31fa6b841e34"
         sorakuvausId      "31972648-ebb7-4185-ac64-31fa6b841e39"]
+
+    (defn hakukohde-url
+      ([oids] (str "/kouta-index/hakukohde/filtered-list?oids=" oids))
+      ([] (hakukohde-url (str hakukohdeOid2 "," hakukohdeOid3 "," hakukohdeOid4 "," hakukohdeOid5))))
 
     (fixture/add-toteutus-mock toteutusOid1 "1.2.246.562.13.0000001" :tila "julkaistu"   :nimi "Automaatioalan perusopinnot" :organisaatio mocks/Oppilaitos2 :tarjoajat mocks/Oppilaitos2)
     (fixture/add-toteutus-mock toteutusOid2 "1.2.246.562.13.0000001" :tila "julkaistu"   :nimi "Automatiikan perusopinnot" :tarjoajat mocks/Oppilaitos2)
@@ -66,8 +66,8 @@
 
     (testing "Filter hakukohde"
       (testing "by organisaatio"
-        (let [oids (get-200-oids (hakukohde-url mocks/Oppilaitos2))]
-          (is (= [hakukohdeOid3 hakukohdeOid1] oids))))
+        (let [oids (get-200-oids (hakukohde-url hakukohdeOid1))]
+          (is (= [hakukohdeOid1] oids))))
       (testing "by oid"
         (let [oids (get-200-oids (str (hakukohde-url) "&nimi=" hakukohdeOid2))]
           (is (= [hakukohdeOid2] oids))))
