@@ -21,6 +21,3 @@
 (defn comma-separated-string->vec
   [string]
   (vec (map #(clojure.string/trim %) (clojure.string/split string #","))))
-
-(defn ->concatenated-vec
-  [])

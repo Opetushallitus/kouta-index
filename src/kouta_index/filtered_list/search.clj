@@ -8,7 +8,7 @@
     [clj-elasticsearch.elastic-connect :as e]
     [kouta-index.util.logging :refer [debug-pretty]]))
 
-(defonce default-source-fields ["oid", "nimi", "tila", "muokkaaja", "modified", "organisaatio", "count"])
+(defonce default-source-fields ["oid", "nimi", "tila", "muokkaaja", "modified", "organisaatio"])
 
 (defn- ->field-keyword
   [lng field]
@@ -19,14 +19,6 @@
              "modified"    "modified"
                            (str "nimi." (->lng lng) ".keyword"))))
 
-(defn- ->count-script-field
-  [script]
-  { :count { :script { :lang "painless" :inline script}}})
-
-(defn- ->count-script-sort
-  [script order]
-  { :_script { :type "number" :order (->order order) :script { :lang "painless" :inline script}}})
-
 (defn- ->second-sort
   [lng order-by]
   (if (and order-by (= "nimi" (->trimmed-lowercase order-by)))
@@ -34,11 +26,8 @@
     (->sort (->field-keyword lng "nimi") "asc")))
 
 (defn- ->sort-array
-  [lng script script-field order-by order]
-  (let [first-sort (if (and script-field (= script-field order-by))
-                     (->count-script-sort script order)
-                     (->sort (->field-keyword lng order-by) order))]
-    [first-sort (->second-sort lng order-by) ]))
+  [lng order-by order]
+    [(->sort (->field-keyword lng order-by) order) (->second-sort lng order-by) ])
 
 (defn- filters?
   [filters]
@@ -73,9 +62,13 @@
         tila      (->tila-filter lng filters)]
     (vec (remove nil? [nimi muokkaaja tila]))))
 
-(defn ->basic-org-query
-  [orgs]
-  (->terms-query :organisaatio.oid (vec orgs)))
+(defn ->basic-oid-query
+  [oids]
+  (->terms-query :oid.keyword (vec oids)))
+
+(defn ->basic-id-query
+  [ids]
+  (->terms-query :id.keyword (vec ids)))
 
 (defn- ->query-with-filters
   [lng base-query filters]
@@ -91,30 +84,25 @@
     base-query))
 
 (defn- ->result
-  [response script-field]
+  [response]
   (debug-pretty response)
   (when (< 0 (-> response :_shards :failed))
     (log/error (cheshire/generate-string (-> response :_shards :failures) {:pretty true})))
 
   (let [hits (:hits response)
         total (:total hits)
-        result (vec (map (fn [x] (-> x
-                                     :_source
-                                     (cond-> (not (nil? script-field)) (assoc (keyword script-field) (first (:count (:fields x))))))) (:hits hits)))]
+        result (vec (map #(-> % :_source) (:hits hits)))]
     (-> {}
         (assoc :totalCount total)
         (assoc :result result))))
 
 (defn search
-  [index source-fields base-query script script-field {:keys [lng page size order-by order] :or {lng "fi" page 1 size 10 order-by "nimi" order "asc"} :as filters}]
+  [index source-fields base-query {:keys [lng page size order-by order] :or {lng "fi" page 1 size 10 order-by "nimi" order "asc"} :as filters}]
   (let [source (vec source-fields)
         from (->from page size)
         size (->size size)
-        sort (->sort-array lng script script-field order-by order)
-        query (->query (->lng lng) base-query filters)
-        script-fields (when script-field (->count-script-field script))]
-    (debug-pretty { :_source source :from from :size size :sort sort :query query :script_fields script-fields })
-    (let [response (if script-field
-                     (e/search index index :_source source :from from :size size :sort sort :query query :script_fields script-fields)
-                     (e/search index index :_source source :from from :size size :sort sort :query query))]
-      (->result response script-field))))
+        sort (->sort-array lng order-by order)
+        query (->query (->lng lng) base-query filters)]
+    (debug-pretty { :_source source :from from :size size :sort sort :query query})
+    (let [response (e/search index index :_source source :from from :size size :sort sort :query query)]
+      (->result response))))
