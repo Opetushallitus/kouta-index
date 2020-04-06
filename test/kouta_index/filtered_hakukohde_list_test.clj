@@ -28,6 +28,18 @@
     ;(println (cheshire.core/generate-string result {:pretty true}))
     (map #(:oid %) result)))
 
+(deftest hakukohde-list-empty-index-test
+  (testing "search in empty index"
+    (get-200-oids "/kouta-index/hakukohde/filtered-list?oids=1.2.246.562.20.000001"))
+  (testing "search in empty index sort by nimi"
+    (get-200-oids "/kouta-index/hakukohde/filtered-list?oids=1.2.246.562.20.000001?order-by=nimi"))
+  (testing "search in empty index sort by tila"
+    (get-200-oids "/kouta-index/hakukohde/filtered-list?oids=1.2.246.562.20.000001?order-by=tila"))
+  (testing "search in empty index sort by muokkaaja"
+    (get-200-oids "/kouta-index/hakukohde/filtered-list?oids=1.2.246.562.20.000001?order-by=muokkaaja"))
+  (testing "search in empty index sort by modified"
+    (get-200-oids "/kouta-index/hakukohde/filtered-list?oids=1.2.246.562.20.000001?order-by=modified")))
+
 (deftest filtered-hakukohde-list-test
 
   (let [toteutusOid1 "1.2.246.562.17.0000001"

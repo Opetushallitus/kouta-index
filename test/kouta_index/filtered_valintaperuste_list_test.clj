@@ -23,6 +23,18 @@
     ;(println (cheshire.core/generate-string result {:pretty true}))
     (map #(:id %) result)))
 
+(deftest valintaperuste-list-empty-index-test
+  (testing "search in empty index"
+    (get-200-ids "/kouta-index/valintaperuste/filtered-list?ids=31972648-ebb7-4185-ac64-31fa6b841e34"))
+  (testing "search in empty index sort by nimi"
+    (get-200-ids "/kouta-index/valintaperuste/filtered-list?ids=31972648-ebb7-4185-ac64-31fa6b841e34?order-by=nimi"))
+  (testing "search in empty index sort by tila"
+    (get-200-ids "/kouta-index/valintaperuste/filtered-list?ids=31972648-ebb7-4185-ac64-31fa6b841e34?order-by=tila"))
+  (testing "search in empty index sort by muokkaaja"
+    (get-200-ids "/kouta-index/valintaperuste/filtered-list?ids=31972648-ebb7-4185-ac64-31fa6b841e34?order-by=muokkaaja"))
+  (testing "search in empty index sort by modified"
+    (get-200-ids "/kouta-index/valintaperuste/filtered-list?ids=31972648-ebb7-4185-ac64-31fa6b841e34?order-by=modified")))
+
 (deftest filtered-valintaperuste-list-test
 
   (let [valintaperusteId1 "31972648-ebb7-4185-ac64-31fa6b841e34"

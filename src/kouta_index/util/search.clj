@@ -23,7 +23,7 @@
 
 (defn ->sort
   [field order]
-  { (keyword field) { :order (->order order)} })
+  { (keyword field) { :order (->order order) :unmapped_type "string"} })
 
 (defn ->terms-query
   [field values]

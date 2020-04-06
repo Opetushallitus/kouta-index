@@ -26,6 +26,18 @@
   [url]
   (map #(:oid %) (:result (get-200 url))))
 
+(deftest koulutus-list-empty-index-test
+  (testing "search in empty index"
+    (get-200-oids "/kouta-index/koulutus/filtered-list?oids=1.2.246.562.13.000001"))
+  (testing "search in empty index sort by nimi"
+    (get-200-oids "/kouta-index/koulutus/filtered-list?oids=1.2.246.562.13.000001?order-by=nimi"))
+  (testing "search in empty index sort by tila"
+    (get-200-oids "/kouta-index/koulutus/filtered-list?oids=1.2.246.562.13.000001?order-by=tila"))
+  (testing "search in empty index sort by muokkaaja"
+    (get-200-oids "/kouta-index/koulutus/filtered-list?oids=1.2.246.562.13.000001?order-by=muokkaaja"))
+  (testing "search in empty index sort by modified"
+    (get-200-oids "/kouta-index/koulutus/filtered-list?oids=1.2.246.562.13.000001?order-by=modified")))
+
 (deftest filtered-koulutus-list-test
 
   (let [koulutusOid1 "1.2.246.562.13.000001"

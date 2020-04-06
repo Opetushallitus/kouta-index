@@ -21,6 +21,18 @@
   [url]
   (map #(:oid %) (:result (get-200 url))))
 
+(deftest haku-list-empty-index-test
+  (testing "search in empty index"
+    (get-200-oids "/kouta-index/haku/filtered-list?oids=1.2.246.562.29.000001"))
+  (testing "search in empty index sort by nimi"
+    (get-200-oids "/kouta-index/haku/filtered-list?oids=1.2.246.562.29.000001?order-by=nimi"))
+  (testing "search in empty index sort by tila"
+    (get-200-oids "/kouta-index/haku/filtered-list?oids=1.2.246.562.29.000001?order-by=tila"))
+  (testing "search in empty index sort by muokkaaja"
+    (get-200-oids "/kouta-index/haku/filtered-list?oids=1.2.246.562.29.000001?order-by=muokkaaja"))
+  (testing "search in empty index sort by modified"
+    (get-200-oids "/kouta-index/haku/filtered-list?oids=1.2.246.562.29.000001?order-by=modified")))
+
 (deftest filtered-haku-list-test
 
   (let [hakuOid1 "1.2.246.562.29.0000001"
