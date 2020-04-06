@@ -38,7 +38,7 @@
 
     (fixture/add-valintaperuste-mock valintaperusteId1 :tila "julkaistu" :nimi "Valintaperustekuvaus" :sorakuvaus sorakuvausId :organisaatio mocks/Oppilaitos2)
     (fixture/add-valintaperuste-mock valintaperusteId2 :tila "julkaistu" :nimi "Valintaperustekuvaus" :sorakuvaus sorakuvausId)
-    (fixture/add-valintaperuste-mock valintaperusteId3 :tila "julkaistu" :nimi "Kiva valintaperustekuvaus" :sorakuvaus sorakuvausId :modified "2018-05-05T12:02" :muokkaaja "5.5.5.5")
+    (fixture/add-valintaperuste-mock valintaperusteId3 :tila "julkaistu" :nimi "Kiva valintaperustekuvaus" :sorakuvaus sorakuvausId :modified "2018-05-05T12:02" :muokkaaja "1.2.246.562.24.55555555555")
     (fixture/add-valintaperuste-mock valintaperusteId4 :tila "arkistoitu" :nimi "Kiva valintaperustekuvaus" :sorakuvaus sorakuvausId :modified "2018-06-05T12:02")
     (fixture/add-valintaperuste-mock valintaperusteId5 :tila "tallennettu" :nimi "Kiva valintaperustekuvaus" :sorakuvaus sorakuvausId :modified "2018-06-05T12:02")
 
@@ -54,7 +54,7 @@
         (let [ids (get-200-ids (str (valintaperuste-url) "&nimi=" valintaperusteId2))]
           (is (= [valintaperusteId2] ids))))
       (testing "by muokkaajan oid"
-        (let [ids (get-200-ids (str (valintaperuste-url) "&muokkaaja=5.5.5.5"))]
+        (let [ids (get-200-ids (str (valintaperuste-url) "&muokkaaja=1.2.246.562.24.55555555555"))]
           (is (= [valintaperusteId3] ids))))
       (testing "by tila"
         (let [ids (get-200-ids (str (valintaperuste-url) "&tila=tallennettu"))]
@@ -70,7 +70,7 @@
         (let [ids (get-200-ids (str (valintaperuste-url) "&arkistoidut=false"))]
           (is (= [valintaperusteId3 valintaperusteId5 valintaperusteId2] ids))))
       (testing "monella arvolla"
-        (let [ids (get-200-ids (str (valintaperuste-url) "&tila=julkaistu&muokkaaja=5.5.5.5"))]
+        (let [ids (get-200-ids (str (valintaperuste-url) "&tila=julkaistu&muokkaaja=1.2.246.562.24.55555555555"))]
           (is (= [valintaperusteId3] ids)))))
 
     (testing "Sort haku result"
@@ -134,6 +134,6 @@
                                   :paikkakunta { :koodiUri "kunta_091"
                                                  :nimi { :fi "kunta_091 nimi fi"
                                                          :sv "kunta_091 nimi sv" }}}
-                  :muokkaaja { :oid "5.5.5.5"
+                  :muokkaaja { :oid "1.2.246.562.24.55555555555"
                                :nimi muokkaaja }
                   :modified "2018-05-05T12:02"} valintaperuste)))))))

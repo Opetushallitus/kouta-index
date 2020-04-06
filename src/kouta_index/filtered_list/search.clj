@@ -104,5 +104,5 @@
         sort (->sort-array lng order-by order)
         query (->query (->lng lng) base-query filters)]
     (debug-pretty { :_source source :from from :size size :sort sort :query query})
-    (let [response (e/search index index :_source source :from from :size size :sort sort :query query)]
+    (let [response (e/search index :_source source :from from :size size :sort sort :query query)]
       (->result response))))
