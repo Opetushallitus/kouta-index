@@ -27,6 +27,18 @@
   (let [result (:result (get-200 url))]
     (map #(:oid %) result)))
 
+(deftest toteutus-list-empty-index-test
+  (testing "search in empty index"
+    (get-200-oids "/kouta-index/toteutus/filtered-list?oids=1.2.246.562.17.000001"))
+  (testing "search in empty index sort by nimi"
+    (get-200-oids "/kouta-index/toteutus/filtered-list?oids=1.2.246.562.17.000001?order-by=nimi"))
+  (testing "search in empty index sort by tila"
+    (get-200-oids "/kouta-index/toteutus/filtered-list?oids=1.2.246.562.17.000001?order-by=tila"))
+  (testing "search in empty index sort by muokkaaja"
+    (get-200-oids "/kouta-index/toteutus/filtered-list?oids=1.2.246.562.17.000001?order-by=muokkaaja"))
+  (testing "search in empty index sort by modified"
+    (get-200-oids "/kouta-index/toteutus/filtered-list?oids=1.2.246.562.17.000001?order-by=modified")))
+
 (deftest filtered-toteutus-list-test
 
   (let [toteutusOid1 "1.2.246.562.17.0000001"
@@ -41,7 +53,7 @@
 
     (fixture/add-toteutus-mock toteutusOid1 "1.2.246.562.13.0000001" :tila "julkaistu"   :nimi "Automaatioalan perusopinnot" :organisaatio mocks/Oppilaitos2)
     (fixture/add-toteutus-mock toteutusOid2 "1.2.246.562.13.0000001" :tila "julkaistu"   :nimi "Automatiikan perusopinnot")
-    (fixture/add-toteutus-mock toteutusOid3 "1.2.246.562.13.0000001" :tila "julkaistu"   :nimi "Autoalan perusopinnot" :modified "2018-05-05T12:02" :muokkaaja "5.5.5.5")
+    (fixture/add-toteutus-mock toteutusOid3 "1.2.246.562.13.0000001" :tila "julkaistu"   :nimi "Autoalan perusopinnot" :modified "2018-05-05T12:02" :muokkaaja "1.2.246.562.24.55555555555")
     (fixture/add-toteutus-mock toteutusOid4 "1.2.246.562.13.0000001" :tila "arkistoitu"  :nimi "Autoalan perusopinnot" :modified "2018-06-05T12:02")
     (fixture/add-toteutus-mock toteutusOid5 "1.2.246.562.13.0000001" :tila "tallennettu" :nimi "Autoalan perusopinnot" :modified "2018-06-05T12:02")
 
@@ -59,7 +71,7 @@
         (let [oids (get-200-oids (str (toteutus-url) "&nimi=" toteutusOid2))]
           (is (= [toteutusOid2] oids))))
       (testing "by muokkaajan oid"
-        (let [oids (get-200-oids (str (toteutus-url) "&muokkaaja=5.5.5.5"))]
+        (let [oids (get-200-oids (str (toteutus-url) "&muokkaaja=1.2.246.562.24.55555555555"))]
           (is (= [toteutusOid3] oids))))
       (testing "by tila"
         (let [oids (get-200-oids (str (toteutus-url) "&tila=tallennettu"))]
@@ -68,7 +80,7 @@
         (let [oids (get-200-oids (str (toteutus-url) "&arkistoidut=false"))]
           (is (= [toteutusOid3 toteutusOid5 toteutusOid2] oids))))
       (testing "monella arvolla"
-        (let [oids (get-200-oids (str (toteutus-url) "&tila=julkaistu&muokkaaja=5.5.5.5"))]
+        (let [oids (get-200-oids (str (toteutus-url) "&tila=julkaistu&muokkaaja=1.2.246.562.24.55555555555"))]
           (is (= [toteutusOid3] oids)))))
 
     (testing "Sort toteutus result"
@@ -132,6 +144,6 @@
                                  :paikkakunta { :koodiUri "kunta_091"
                                                :nimi { :fi "kunta_091 nimi fi"
                                                       :sv "kunta_091 nimi sv" }}}
-                  :muokkaaja { :oid "5.5.5.5"
+                  :muokkaaja { :oid "1.2.246.562.24.55555555555"
                               :nimi muokkaaja }
                   :modified "2018-05-05T12:02"} toteutus)))))))

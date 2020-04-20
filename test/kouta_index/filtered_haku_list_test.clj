@@ -21,6 +21,18 @@
   [url]
   (map #(:oid %) (:result (get-200 url))))
 
+(deftest haku-list-empty-index-test
+  (testing "search in empty index"
+    (get-200-oids "/kouta-index/haku/filtered-list?oids=1.2.246.562.29.000001"))
+  (testing "search in empty index sort by nimi"
+    (get-200-oids "/kouta-index/haku/filtered-list?oids=1.2.246.562.29.000001?order-by=nimi"))
+  (testing "search in empty index sort by tila"
+    (get-200-oids "/kouta-index/haku/filtered-list?oids=1.2.246.562.29.000001?order-by=tila"))
+  (testing "search in empty index sort by muokkaaja"
+    (get-200-oids "/kouta-index/haku/filtered-list?oids=1.2.246.562.29.000001?order-by=muokkaaja"))
+  (testing "search in empty index sort by modified"
+    (get-200-oids "/kouta-index/haku/filtered-list?oids=1.2.246.562.29.000001?order-by=modified")))
+
 (deftest filtered-haku-list-test
 
   (let [hakuOid1 "1.2.246.562.29.0000001"
@@ -35,7 +47,7 @@
 
     (fixture/add-haku-mock hakuOid1 :tila "julkaistu"   :nimi "Yhteishaku" :organisaatio mocks/Oppilaitos2)
     (fixture/add-haku-mock hakuOid2 :tila "julkaistu"   :nimi "Yhteishaku")
-    (fixture/add-haku-mock hakuOid3 :tila "julkaistu"   :nimi "Jatkuva haku" :modified "2018-05-05T12:02" :muokkaaja "5.5.5.5")
+    (fixture/add-haku-mock hakuOid3 :tila "julkaistu"   :nimi "Jatkuva haku" :modified "2018-05-05T12:02" :muokkaaja "1.2.246.562.24.55555555555")
     (fixture/add-haku-mock hakuOid4 :tila "arkistoitu"  :nimi "Jatkuva haku" :modified "2018-06-05T12:02")
     (fixture/add-haku-mock hakuOid5 :tila "tallennettu" :nimi "Jatkuva haku" :modified "2018-06-05T12:02")
 
@@ -59,7 +71,7 @@
         (let [oids (get-200-oids (str (haku-url) "&nimi=" hakuOid2))]
           (is (= [hakuOid2] oids))))
       (testing "by muokkaajan oid"
-        (let [oids (get-200-oids (str (haku-url) "&muokkaaja=5.5.5.5"))]
+        (let [oids (get-200-oids (str (haku-url) "&muokkaaja=1.2.246.562.24.55555555555"))]
           (is (= [hakuOid3] oids))))
       (testing "by tila"
         (let [oids (get-200-oids (str (haku-url) "&tila=tallennettu"))]
@@ -68,7 +80,7 @@
         (let [oids (get-200-oids (str (haku-url) "&arkistoidut=false"))]
           (is (= [hakuOid3 hakuOid5 hakuOid2] oids))))
       (testing "monella arvolla"
-        (let [oids (get-200-oids (str (haku-url) "&tila=julkaistu&muokkaaja=5.5.5.5"))]
+        (let [oids (get-200-oids (str (haku-url) "&tila=julkaistu&muokkaaja=1.2.246.562.24.55555555555"))]
           (is (= [hakuOid3] oids)))))
 
     (testing "Sort haku result"
@@ -132,6 +144,6 @@
                                  :paikkakunta { :koodiUri "kunta_091"
                                                :nimi { :fi "kunta_091 nimi fi"
                                                       :sv "kunta_091 nimi sv" }}}
-                  :muokkaaja { :oid "5.5.5.5"
+                  :muokkaaja { :oid "1.2.246.562.24.55555555555"
                               :nimi muokkaaja }
                   :modified "2018-05-05T12:02"} haku)))))))

@@ -26,6 +26,18 @@
   [url]
   (map #(:oid %) (:result (get-200 url))))
 
+(deftest koulutus-list-empty-index-test
+  (testing "search in empty index"
+    (get-200-oids "/kouta-index/koulutus/filtered-list?oids=1.2.246.562.13.000001"))
+  (testing "search in empty index sort by nimi"
+    (get-200-oids "/kouta-index/koulutus/filtered-list?oids=1.2.246.562.13.000001?order-by=nimi"))
+  (testing "search in empty index sort by tila"
+    (get-200-oids "/kouta-index/koulutus/filtered-list?oids=1.2.246.562.13.000001?order-by=tila"))
+  (testing "search in empty index sort by muokkaaja"
+    (get-200-oids "/kouta-index/koulutus/filtered-list?oids=1.2.246.562.13.000001?order-by=muokkaaja"))
+  (testing "search in empty index sort by modified"
+    (get-200-oids "/kouta-index/koulutus/filtered-list?oids=1.2.246.562.13.000001?order-by=modified")))
+
 (deftest filtered-koulutus-list-test
 
   (let [koulutusOid1 "1.2.246.562.13.000001"
@@ -40,7 +52,7 @@
 
     (fixture/add-koulutus-mock koulutusOid1 :tila "julkaistu" :nimi "Hauska koulutus" :organisaatio mocks/Oppilaitos2)
     (fixture/add-koulutus-mock koulutusOid2 :tila "julkaistu" :nimi "Tietojenkäsittelytieteen perusopinnot" :modified "2018-05-05T12:02")
-    (fixture/add-koulutus-mock koulutusOid3 :tila "julkaistu" :nimi "Tietotekniikan perusopinnot" :muokkaaja "5.5.5.5")
+    (fixture/add-koulutus-mock koulutusOid3 :tila "julkaistu" :nimi "Tietotekniikan perusopinnot" :muokkaaja "1.2.246.562.24.55555555555")
     (fixture/add-koulutus-mock koulutusOid4 :tila "arkistoitu" :nimi "Tietojenkäsittelytieteen perusopinnot")
     (fixture/add-koulutus-mock koulutusOid5 :tila "tallennettu" :nimi "Tietojenkäsittelytieteen perusopinnot")
 
@@ -59,7 +71,7 @@
         (let [oids (get-200-oids (str (koulutus-url) "&nimi=" koulutusOid2))]
           (is (= [koulutusOid2] oids))))
       (testing "by muokkaajan oid"
-        (let [oids (get-200-oids (str (koulutus-url) "&muokkaaja=5.5.5.5"))]
+        (let [oids (get-200-oids (str (koulutus-url) "&muokkaaja=1.2.246.562.24.55555555555"))]
           (is (= [koulutusOid3] oids))))
       (testing "by tila"
         (let [oids (get-200-oids (str (koulutus-url) "&tila=tallennettu"))]
@@ -75,7 +87,7 @@
         (let [oids (get-200-oids (str (koulutus-url) "&arkistoidut=false&order-by=tila"))]
           (is (= [koulutusOid2 koulutusOid3 koulutusOid5] oids))))
       (testing "monella arvolla"
-        (let [oids (get-200-oids (str (koulutus-url) "&tila=julkaistu&muokkaaja=5.5.5.5"))]
+        (let [oids (get-200-oids (str (koulutus-url) "&tila=julkaistu&muokkaaja=1.2.246.562.24.55555555555"))]
           (is (= [koulutusOid3] oids)))))
 
     (testing "Sort koulutus result"
@@ -139,7 +151,7 @@
                                    :paikkakunta { :koodiUri "kunta_091"
                                                   :nimi { :fi "kunta_091 nimi fi"
                                                           :sv "kunta_091 nimi sv" }}}
-                   :muokkaaja { :oid "1.2.3"
+                   :muokkaaja { :oid "1.2.246.562.24.10000000000"
                                 :nimi muokkaaja }
                    :modified "2018-05-05T12:02"} koulutus)))))
 
