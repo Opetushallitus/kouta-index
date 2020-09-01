@@ -53,9 +53,9 @@
 
     (fixture/add-toteutus-mock toteutusOid1 "1.2.246.562.13.0000001" :tila "julkaistu"   :nimi "Automaatioalan perusopinnot" :organisaatio mocks/Oppilaitos2)
     (fixture/add-toteutus-mock toteutusOid2 "1.2.246.562.13.0000001" :tila "julkaistu"   :nimi "Automatiikan perusopinnot")
-    (fixture/add-toteutus-mock toteutusOid3 "1.2.246.562.13.0000001" :tila "julkaistu"   :nimi "Autoalan perusopinnot" :modified "2018-05-05T12:02" :muokkaaja "1.2.246.562.24.55555555555")
-    (fixture/add-toteutus-mock toteutusOid4 "1.2.246.562.13.0000001" :tila "arkistoitu"  :nimi "Autoalan perusopinnot" :modified "2018-06-05T12:02")
-    (fixture/add-toteutus-mock toteutusOid5 "1.2.246.562.13.0000001" :tila "tallennettu" :nimi "Autoalan perusopinnot" :modified "2018-06-05T12:02")
+    (fixture/add-toteutus-mock toteutusOid3 "1.2.246.562.13.0000001" :tila "julkaistu"   :nimi "Autoalan perusopinnot" :modified "2018-05-05T12:02:23" :muokkaaja "1.2.246.562.24.55555555555")
+    (fixture/add-toteutus-mock toteutusOid4 "1.2.246.562.13.0000001" :tila "arkistoitu"  :nimi "Autoalan perusopinnot" :modified "2018-06-05T12:02:23")
+    (fixture/add-toteutus-mock toteutusOid5 "1.2.246.562.13.0000001" :tila "tallennettu" :nimi "Autoalan perusopinnot" :modified "2018-06-05T12:02:23")
 
     ;(fixture/add-hakukohde-mock "1.2.246.562.20.0000001" toteutusOid4 "1.2.246.562.29.0000001" :tila "julkaistu" :nimi "Hakukohde")
     ;(fixture/add-hakukohde-mock "1.2.246.562.20.0000002" toteutusOid5 "1.2.246.562.29.0000001" :tila "julkaistu" :nimi "Hakukohde")
@@ -146,4 +146,4 @@
                                                       :sv "kunta_091 nimi sv" }}}
                   :muokkaaja { :oid "1.2.246.562.24.55555555555"
                               :nimi muokkaaja }
-                  :modified "2018-05-05T12:02"} toteutus)))))))
+                  :modified "2018-05-05T12:02:23"} toteutus)))))))
