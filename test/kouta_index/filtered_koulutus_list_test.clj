@@ -51,7 +51,7 @@
       ([] (koulutus-url (str koulutusOid2 "," koulutusOid3 "," koulutusOid4 "," koulutusOid5))))
 
     (fixture/add-koulutus-mock koulutusOid1 :tila "julkaistu" :nimi "Hauska koulutus" :organisaatio mocks/Oppilaitos2)
-    (fixture/add-koulutus-mock koulutusOid2 :tila "julkaistu" :nimi "Tietojenkäsittelytieteen perusopinnot" :modified "2018-05-05T12:02")
+    (fixture/add-koulutus-mock koulutusOid2 :tila "julkaistu" :nimi "Tietojenkäsittelytieteen perusopinnot" :modified "2018-05-05T12:02:23")
     (fixture/add-koulutus-mock koulutusOid3 :tila "julkaistu" :nimi "Tietotekniikan perusopinnot" :muokkaaja "1.2.246.562.24.55555555555")
     (fixture/add-koulutus-mock koulutusOid4 :tila "arkistoitu" :nimi "Tietojenkäsittelytieteen perusopinnot")
     (fixture/add-koulutus-mock koulutusOid5 :tila "tallennettu" :nimi "Tietojenkäsittelytieteen perusopinnot")
@@ -153,7 +153,7 @@
                                                           :sv "kunta_091 nimi sv" }}}
                    :muokkaaja { :oid "1.2.246.562.24.10000000000"
                                 :nimi muokkaaja }
-                   :modified "2018-05-05T12:02"} koulutus)))))
+                   :modified "2018-05-05T12:02:23"} koulutus)))))
 
 
       (comment testing "Filter koulutus by nimi" ;TODO Tämä eivät saisi feilata!

@@ -47,9 +47,9 @@
 
     (fixture/add-haku-mock hakuOid1 :tila "julkaistu"   :nimi "Yhteishaku" :organisaatio mocks/Oppilaitos2)
     (fixture/add-haku-mock hakuOid2 :tila "julkaistu"   :nimi "Yhteishaku")
-    (fixture/add-haku-mock hakuOid3 :tila "julkaistu"   :nimi "Jatkuva haku" :modified "2018-05-05T12:02" :muokkaaja "1.2.246.562.24.55555555555")
-    (fixture/add-haku-mock hakuOid4 :tila "arkistoitu"  :nimi "Jatkuva haku" :modified "2018-06-05T12:02")
-    (fixture/add-haku-mock hakuOid5 :tila "tallennettu" :nimi "Jatkuva haku" :modified "2018-06-05T12:02")
+    (fixture/add-haku-mock hakuOid3 :tila "julkaistu"   :nimi "Jatkuva haku" :modified "2018-05-05T12:02:23" :muokkaaja "1.2.246.562.24.55555555555")
+    (fixture/add-haku-mock hakuOid4 :tila "arkistoitu"  :nimi "Jatkuva haku" :modified "2018-06-05T12:02:23")
+    (fixture/add-haku-mock hakuOid5 :tila "tallennettu" :nimi "Jatkuva haku" :modified "2018-06-05T12:02:23")
 
     ;(fixture/add-hakukohde-mock "1.2.246.562.20.000001" "1.2.246.562.17.000001" hakuOid2 :valintaperuste "31972648-ebb7-4185-ac64-31fa6b841e34")
     ;(fixture/add-hakukohde-mock "1.2.246.562.20.000002" "1.2.246.562.17.000002" hakuOid3 :valintaperuste "31972648-ebb7-4185-ac64-31fa6b841e34")
@@ -146,4 +146,4 @@
                                                       :sv "kunta_091 nimi sv" }}}
                   :muokkaaja { :oid "1.2.246.562.24.55555555555"
                               :nimi muokkaaja }
-                  :modified "2018-05-05T12:02"} haku)))))))
+                  :modified "2018-05-05T12:02:23"} haku)))))))

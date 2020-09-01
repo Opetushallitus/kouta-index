@@ -56,15 +56,15 @@
 
     (fixture/add-toteutus-mock toteutusOid1 "1.2.246.562.13.0000001" :tila "julkaistu"   :nimi "Automaatioalan perusopinnot" :organisaatio mocks/Oppilaitos2 :tarjoajat mocks/Oppilaitos2)
     (fixture/add-toteutus-mock toteutusOid2 "1.2.246.562.13.0000001" :tila "julkaistu"   :nimi "Automatiikan perusopinnot" :tarjoajat mocks/Oppilaitos2)
-    (fixture/add-toteutus-mock toteutusOid3 "1.2.246.562.13.0000001" :tila "julkaistu"   :nimi "Autoalan perusopinnot" :modified "2018-05-05T12:02" :muokkaaja "1.2.246.562.24.55555555555")
-    (fixture/add-toteutus-mock toteutusOid4 "1.2.246.562.13.0000001" :tila "arkistoitu"  :nimi "Autoalan perusopinnot" :modified "2018-06-05T12:02")
-    (fixture/add-toteutus-mock toteutusOid5 "1.2.246.562.13.0000001" :tila "tallennettu" :nimi "Autoalan perusopinnot" :modified "2018-06-05T12:02")
+    (fixture/add-toteutus-mock toteutusOid3 "1.2.246.562.13.0000001" :tila "julkaistu"   :nimi "Autoalan perusopinnot" :modified "2018-05-05T12:02:23" :muokkaaja "1.2.246.562.24.55555555555")
+    (fixture/add-toteutus-mock toteutusOid4 "1.2.246.562.13.0000001" :tila "arkistoitu"  :nimi "Autoalan perusopinnot" :modified "2018-06-05T12:02:23")
+    (fixture/add-toteutus-mock toteutusOid5 "1.2.246.562.13.0000001" :tila "tallennettu" :nimi "Autoalan perusopinnot" :modified "2018-06-05T12:02:23")
 
     (fixture/add-hakukohde-mock hakukohdeOid1 toteutusOid1 "1.2.246.562.29.0000001" :tila "julkaistu" :nimi "Hakukohde" :valintaperuste valintaperusteId1 :organisaatio mocks/Oppilaitos2)
     (fixture/add-hakukohde-mock hakukohdeOid2 toteutusOid4 "1.2.246.562.29.0000001" :tila "julkaistu" :nimi "Hakukohde" :valintaperuste valintaperusteId1)
-    (fixture/add-hakukohde-mock hakukohdeOid3 toteutusOid2 "1.2.246.562.29.0000001" :tila "julkaistu" :nimi "autoalan hakukohde" :valintaperuste valintaperusteId1 :modified "2018-05-05T12:02" :muokkaaja "1.2.246.562.24.55555555555")
-    (fixture/add-hakukohde-mock hakukohdeOid4 toteutusOid5 "1.2.246.562.29.0000001" :tila "arkistoitu" :nimi "Autoalan hakukohde" :valintaperuste valintaperusteId1 :modified "2018-06-05T12:02")
-    (fixture/add-hakukohde-mock hakukohdeOid5 toteutusOid5 "1.2.246.562.29.0000001" :tila "tallennettu" :nimi "Autoalan hakukohde" :valintaperuste valintaperusteId1 :modified "2018-06-05T12:02")
+    (fixture/add-hakukohde-mock hakukohdeOid3 toteutusOid2 "1.2.246.562.29.0000001" :tila "julkaistu" :nimi "autoalan hakukohde" :valintaperuste valintaperusteId1 :modified "2018-05-05T12:02:23" :muokkaaja "1.2.246.562.24.55555555555")
+    (fixture/add-hakukohde-mock hakukohdeOid4 toteutusOid5 "1.2.246.562.29.0000001" :tila "arkistoitu" :nimi "Autoalan hakukohde" :valintaperuste valintaperusteId1 :modified "2018-06-05T12:02:23")
+    (fixture/add-hakukohde-mock hakukohdeOid5 toteutusOid5 "1.2.246.562.29.0000001" :tila "tallennettu" :nimi "Autoalan hakukohde" :valintaperuste valintaperusteId1 :modified "2018-06-05T12:02:23")
 
     (fixture/add-sorakuvaus-mock sorakuvausId :tila "julkaistu" :nimi "Kiva SORA-kuvaus")
     (fixture/add-valintaperuste-mock valintaperusteId1 :tila "julkaistu" :nimi "Valintaperustekuvaus" :sorakuvaus sorakuvausId)
@@ -148,4 +148,4 @@
                                                       :sv "kunta_091 nimi sv" }}}
                   :muokkaaja { :oid "1.2.246.562.24.55555555555"
                               :nimi muokkaaja }
-                  :modified "2018-05-05T12:02"} hakukohde)))))))
+                  :modified "2018-05-05T12:02:23"} hakukohde)))))))
