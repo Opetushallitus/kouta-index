@@ -13,7 +13,6 @@
                  [ring-cors "0.1.13"]
                  ; Logging
                  [oph/clj-log "0.2.3-SNAPSHOT"]
-                 [oph/clj-test-utils "0.2.7-SNAPSHOT"]
                  [org.clojure/tools.logging "0.4.1"]
                  [org.apache.logging.log4j/log4j-api "2.11.1"]
                  [org.apache.logging.log4j/log4j-core "2.11.1"]
