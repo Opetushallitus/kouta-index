@@ -13,7 +13,6 @@
                  [ring-cors "0.1.13"]
                  ; Logging
                  [oph/clj-log "0.2.3-SNAPSHOT"]
-                 [oph/clj-test-utils "0.2.7-SNAPSHOT"]
                  [org.clojure/tools.logging "0.4.1"]
                  [org.apache.logging.log4j/log4j-api "2.11.1"]
                  [org.apache.logging.log4j/log4j-core "2.11.1"]
@@ -24,7 +23,7 @@
                  [environ "1.1.0"]
                  [cprop "0.1.13"]
                  ; Elasticsearch
-                 [oph/clj-elasticsearch "0.3.0-SNAPSHOT"]]
+                 [oph/clj-elasticsearch "0.3.2-SNAPSHOT"]]
   :ring {:handler kouta-index.api/app
          :init kouta-index.api/init
          ;:destroy kouta-index.core/destroy
@@ -36,12 +35,13 @@
             [lein-environ "1.1.0"]]
   :profiles {:dev {:plugins [[lein-cloverage "1.0.11" :exclusions [org.clojure/clojure]]]}
              :test {:dependencies [[ring/ring-mock "0.3.2"]
-                                   [kouta-indeksoija-service "0.4.0-SNAPSHOT"]
-                                   [fi.oph.kouta/kouta-backend "0.23-SNAPSHOT"]
-                                   [fi.oph.kouta/kouta-backend "0.23-SNAPSHOT" :classifier "tests"]
-                                   [oph/clj-test-utils "0.2.7-SNAPSHOT"]]
-                    :injections [(require '[clj-test-utils.elasticsearch-mock-utils :as utils])
-                                 (utils/global-elasticsearch-fixture)]}
+                                   [kouta-indeksoija-service "6.0.0-SNAPSHOT"]
+                                   [fi.oph.kouta/kouta-backend "6.0.0-SNAPSHOT"]
+                                   [fi.oph.kouta/kouta-backend "6.0.0-SNAPSHOT" :classifier "tests"]
+                                   [fi.oph.kouta/kouta-common "2.2.0-SNAPSHOT" :classifier "tests"]
+                                   [oph/clj-test-utils "0.2.8-SNAPSHOT"]]
+                    :injections [(require '[clj-test-utils.elasticsearch-docker-utils :as utils])
+                                 (utils/global-docker-elastic-fixture)]}
              :ci-test {:dependencies [[ring/ring-mock "0.3.2"]] :jvm-opts ["-Dlog4j.configurationFile=test/resources/log4j2.properties" "-Dconf=ci-configuration/kouta-index.edn"]}
              :uberjar {:ring {:port 8080}}}
   :aliases {"run" ["ring" "server" "3006"]

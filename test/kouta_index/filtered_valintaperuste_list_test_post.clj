@@ -2,14 +2,13 @@
   (:require [clojure.test :refer :all]
             [kouta-index.api :refer :all]
             [ring.mock.request :as mock]
-            [clj-test-utils.elasticsearch-mock-utils :as utils]
             [kouta-indeksoija-service.fixture.kouta-indexer-fixture :as fixture]
             [kouta-index.test-tools :as tools]
             [kouta-indeksoija-service.fixture.external-services :as mocks]))
 
 (intern 'clj-log.access-log 'service "kouta-index")
 
-(use-fixtures :each utils/mock-embedded-elasticsearch-fixture fixture/mock-indexing-fixture tools/mock-organisaatio)
+(use-fixtures :each fixture/mock-indexing-fixture tools/mock-organisaatio)
 
 (defn post-200
   [ids params]
@@ -47,9 +46,9 @@
 
     (fixture/add-valintaperuste-mock valintaperusteId1 :tila "julkaistu" :nimi "Valintaperustekuvaus" :sorakuvaus sorakuvausId :organisaatio mocks/Oppilaitos2)
     (fixture/add-valintaperuste-mock valintaperusteId2 :tila "julkaistu" :nimi "Valintaperustekuvaus" :sorakuvaus sorakuvausId)
-    (fixture/add-valintaperuste-mock valintaperusteId3 :tila "julkaistu" :nimi "Kiva valintaperustekuvaus" :sorakuvaus sorakuvausId :modified "2018-05-05T12:02" :muokkaaja "1.2.246.562.24.55555555555")
-    (fixture/add-valintaperuste-mock valintaperusteId4 :tila "arkistoitu" :nimi "Kiva valintaperustekuvaus" :sorakuvaus sorakuvausId :modified "2018-06-05T12:02")
-    (fixture/add-valintaperuste-mock valintaperusteId5 :tila "tallennettu" :nimi "Kiva valintaperustekuvaus" :sorakuvaus sorakuvausId :modified "2018-06-05T12:02")
+    (fixture/add-valintaperuste-mock valintaperusteId3 :tila "julkaistu" :nimi "Kiva valintaperustekuvaus" :sorakuvaus sorakuvausId :modified "2018-05-05T12:02:23" :muokkaaja "1.2.246.562.24.55555555555")
+    (fixture/add-valintaperuste-mock valintaperusteId4 :tila "arkistoitu" :nimi "Kiva valintaperustekuvaus" :sorakuvaus sorakuvausId :modified "2018-06-05T12:02:23")
+    (fixture/add-valintaperuste-mock valintaperusteId5 :tila "tallennettu" :nimi "Kiva valintaperustekuvaus" :sorakuvaus sorakuvausId :modified "2018-06-05T12:02:23")
 
     (fixture/add-sorakuvaus-mock sorakuvausId :tila "julkaistu" :nimi "Kiva SORA-kuvaus")
 
@@ -145,4 +144,4 @@
                                                          :sv "kunta_091 nimi sv" }}}
                   :muokkaaja { :oid "1.2.246.562.24.55555555555"
                                :nimi muokkaaja }
-                  :modified "2018-05-05T12:02"} valintaperuste)))))))
+                  :modified "2018-05-05T12:02:23"} valintaperuste)))))))

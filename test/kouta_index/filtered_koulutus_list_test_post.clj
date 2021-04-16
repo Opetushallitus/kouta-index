@@ -2,7 +2,6 @@
     (:require [clojure.test :refer :all]
       [kouta-index.api :refer :all]
       [ring.mock.request :as mock]
-      [clj-test-utils.elasticsearch-mock-utils :as utils]
       [kouta-indeksoija-service.fixture.kouta-indexer-fixture :as fixture]
       [kouta-index.test-tools :as tools]
       [kouta-indeksoija-service.fixture.external-services :as mocks])
@@ -10,7 +9,7 @@
 
 (intern 'clj-log.access-log 'service "kouta-index")
 
-(use-fixtures :each utils/mock-embedded-elasticsearch-fixture fixture/mock-indexing-fixture tools/mock-organisaatio)
+(use-fixtures :each fixture/mock-indexing-fixture tools/mock-organisaatio)
 
 (defn enc
   [str]
@@ -50,7 +49,7 @@
         defaultOids  [koulutusOid2 koulutusOid3 koulutusOid4 koulutusOid5]]
 
     (fixture/add-koulutus-mock koulutusOid1 :tila "julkaistu" :nimi "Hauska koulutus" :organisaatio mocks/Oppilaitos2)
-    (fixture/add-koulutus-mock koulutusOid2 :tila "julkaistu" :nimi "Tietojenkäsittelytieteen perusopinnot" :modified "2018-05-05T12:02")
+    (fixture/add-koulutus-mock koulutusOid2 :tila "julkaistu" :nimi "Tietojenkäsittelytieteen perusopinnot" :modified "2018-05-05T12:02:23")
     (fixture/add-koulutus-mock koulutusOid3 :tila "julkaistu" :nimi "Tietotekniikan perusopinnot" :muokkaaja "1.2.246.562.24.55555555555")
     (fixture/add-koulutus-mock koulutusOid4 :tila "arkistoitu" :nimi "Tietojenkäsittelytieteen perusopinnot")
     (fixture/add-koulutus-mock koulutusOid5 :tila "tallennettu" :nimi "Tietojenkäsittelytieteen perusopinnot")
@@ -152,7 +151,7 @@
                                                           :sv "kunta_091 nimi sv" }}}
                    :muokkaaja { :oid "1.2.246.562.24.10000000000"
                                 :nimi muokkaaja }
-                   :modified "2018-05-05T12:02"} koulutus)))))
+                   :modified "2018-05-05T12:02:23"} koulutus)))))
 
 
     (comment testing "Filter koulutus by nimi"              ;TODO Tämä eivät saisi feilata!
