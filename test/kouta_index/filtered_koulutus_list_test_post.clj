@@ -2,7 +2,6 @@
     (:require [clojure.test :refer :all]
       [kouta-index.api :refer :all]
       [ring.mock.request :as mock]
-      [clj-test-utils.elasticsearch-mock-utils :as utils]
       [kouta-indeksoija-service.fixture.kouta-indexer-fixture :as fixture]
       [kouta-index.test-tools :as tools]
       [kouta-indeksoija-service.fixture.external-services :as mocks])
@@ -10,7 +9,7 @@
 
 (intern 'clj-log.access-log 'service "kouta-index")
 
-(use-fixtures :each utils/mock-embedded-elasticsearch-fixture fixture/mock-indexing-fixture tools/mock-organisaatio)
+(use-fixtures :each fixture/mock-indexing-fixture tools/mock-organisaatio)
 
 (defn enc
   [str]
