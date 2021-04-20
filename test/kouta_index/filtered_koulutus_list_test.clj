@@ -153,7 +153,7 @@
                    :muokkaaja { :oid "1.2.246.562.24.10000000000"
                                 :nimi muokkaaja }
                    :modified "2018-05-05T12:02:23"
-                   :metadata {:eperuste {:voimassaoloLoppuu "2018-01-01T00:00:00", :diaarinumero "1111-OPH-2021", :id 1234}}} koulutus)))))
+                   :eperuste {:voimassaoloLoppuu "2018-01-01T00:00:00", :diaarinumero "1111-OPH-2021", :id 1234}} koulutus)))))
 
 
       (comment testing "Filter koulutus by nimi" ;TODO Tämä eivät saisi feilata!

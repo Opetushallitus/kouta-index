@@ -4,6 +4,10 @@
     [kouta-index.rest.organisaatio :refer :all]
     [kouta-index.util.search :refer [->terms-query ->match-query]]))
 
+(defn- map-results
+  [response fn]
+  (update response :result #(map fn %)))
+
 (defn search-koulutukset
   [oids params]
   (let [base-query (->basic-oid-query oids)
@@ -11,7 +15,10 @@
                             "metadata.eperuste"
                             "toteutukset.tila"
                             "toteutukset.organisaatiot")]
-    (search "koulutus-kouta-virkailija" source-fields base-query params)))
+    (-> (search "koulutus-kouta-virkailija" source-fields base-query params)
+        (map-results (fn [koulutus] (-> koulutus
+                                        (#(assoc % :eperuste (get-in % [:metadata :eperuste])))
+                                        (dissoc :metadata)))))))
 
 (defn search-toteutukset
   [oids params]
@@ -20,7 +27,12 @@
                             "organisaatiot"
                             "hakutiedot.hakukohteet.tila"
                             "hakutiedot.hakukohteet.organisaatioOid")]
-    (search "toteutus-kouta-virkailija" source-fields base-query params)))
+    (-> (search "toteutus-kouta-virkailija" source-fields base-query params)
+        (map-results (fn [toteutus] (-> toteutus
+                                        (#(assoc % :hakukohteet (->> (get % :hakutiedot [])
+                                                                     (map :hakukohteet)
+                                                                     (flatten))))
+                                        (dissoc :hakutiedot)))))))
 
 (defn search-haut
   [oids params]

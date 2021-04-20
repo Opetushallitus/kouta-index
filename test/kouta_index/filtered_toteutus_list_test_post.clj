@@ -133,11 +133,12 @@
           (is (= [] oids)))))
 
       (testing "Toteutus result contains hakutieto hakukohde organisaatio and tila"
-        (let [res (post-200 [toteutusOid1] "")]
+        (let [res (post-200 [toteutusOid1] "")
+              hakukohteet-count (-> res :result (first) :hakukohteet (count))
+              has-organisaatio-and-tila (->> res :result (first) :hakukohteet (every? #(contains-many? % :organisaatioOid :tila)))]
           (is (= 1 (:totalCount res)))
-          (is (= 1 (-> res :result (first) :hakutiedot (count))))
-          (is (= 2 (-> res :result (first) :hakutiedot (first) :hakukohteet (count))))
-          (is (->>     res :result (first) :hakutiedot (first) :hakukohteet (every? #(contains-many? % :organisaatioOid :tila))))))
+          (is (= 2 hakukohteet-count))
+          (is (true? has-organisaatio-and-tila))))
 
       (testing "Toteutus result contain proper fields"
         (let [res (post-200 defaultOids (str "?nimi=" toteutusOid3))]
@@ -155,6 +156,7 @@
                                                  :nimi { :fi "kunta_091 nimi fi"
                                                         :sv "kunta_091 nimi sv" }}}
                     :organisaatiot ["1.2.246.562.10.54545454545" "1.2.246.562.10.67476956288" "1.2.246.562.10.594252633210"]
+                    :hakukohteet []
                     :muokkaaja {:oid "1.2.246.562.24.55555555555"
                                 :nimi muokkaaja }
                     :modified "2018-05-05T12:02:23"} toteutus)))))))
