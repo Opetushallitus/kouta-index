@@ -5,8 +5,8 @@
     [kouta-index.util.search :refer [->terms-query ->match-query]]))
 
 (defn- map-results
-  [response fn]
-  (update response :result #(map fn %)))
+  [response f]
+  (update response :result #(map f %)))
 
 (defn search-koulutukset
   [oids params]
