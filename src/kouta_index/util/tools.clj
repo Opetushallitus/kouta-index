@@ -21,3 +21,6 @@
 (defn comma-separated-string->vec
   [string]
   (vec (map #(clojure.string/trim %) (clojure.string/split string #","))))
+
+(defn contains-many? [m & ks]
+  (every? #(contains? m %) ks))
