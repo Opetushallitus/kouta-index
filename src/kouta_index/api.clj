@@ -36,8 +36,9 @@
       (context "/koulutus"
                []
         :tags ["koulutus"]
+        ; TODO GET is deprecated, remove when refactored
         (GET "/filtered-list" [:as request]
-          :summary "Listaa koulutusten rikastetut perustiedot indeksistä"
+          :summary "DEPREKOITU - Listaa koulutusten rikastetut perustiedot indeksistä"
           :query-params [oids :- (describe String "Pilkulla eroteltu lista koulutusten oideja")
                          {nimi :- (describe String "Suodata annetulla koulutuksen nimellä tai oidilla") nil}
                          {muokkaaja :- (describe String "Suodata annetulla muokkaajan nimellä tai oidilla") nil}
@@ -66,8 +67,9 @@
       (context "/toteutus"
                []
         :tags ["toteutus"]
+        ; TODO GET is deprecated, remove when refactored
         (GET "/filtered-list" [:as request]
-          :summary "Listaa toteutusten rikastetut perustiedot indeksistä"
+          :summary "DEPREKOITU - Listaa toteutusten rikastetut perustiedot indeksistä"
           :query-params [oids :- (describe String "Pilkulla eroteltu lista toteutusten oideja")
                          {nimi :- (describe String "Suodata annetulla toteutuksen nimellä tai oidilla") nil}
                          {muokkaaja :- (describe String "Suodata annetulla muokkaajan nimellä tai oidilla") nil}
@@ -96,8 +98,9 @@
       (context "/haku"
                []
         :tags ["haku"]
+        ; TODO GET is deprecated, remove when refactored
         (GET "/filtered-list" [:as request]
-          :summary "Listaa hakujen rikastetut perustiedot indeksistä"
+          :summary "DEPREKOITU - Listaa hakujen rikastetut perustiedot indeksistä"
           :query-params [oids :- (describe String "Pilkulla eroteltu lista hakujen oideja")
                          {nimi :- (describe String "Suodata annetulla haun nimellä tai oidilla") nil}
                          {muokkaaja :- (describe String "Suodata annetulla muokkaajan nimellä tai oidilla") nil}
@@ -126,8 +129,9 @@
       (context "/valintaperuste"
                []
         :tags ["valintaperuste"]
+        ; TODO GET is deprecated, remove when refactored
         (GET "/filtered-list" [:as request]
-          :summary "Listaa valintaperusteiden rikastetut perustiedot indeksistä"
+          :summary "DEPREKOITU - Listaa valintaperusteiden rikastetut perustiedot indeksistä"
           :query-params [ids :- (describe String "Pilkulla eroteltu lista valintaperusteiden id:itä")
                          {nimi :- (describe String "Suodata annetulla valintaperusteen nimellä tai oidilla") nil}
                          {muokkaaja :- (describe String "Suodata annetulla muokkaajan nimellä tai oidilla") nil}
@@ -156,8 +160,9 @@
       (context "/hakukohde"
                []
         :tags ["hakukohde"]
+        ; TODO GET is deprecated, remove when refactored
         (GET "/filtered-list" [:as request]
-          :summary "Listaa hakukohteiden rikastetut perustiedot indeksistä"
+          :summary "DEPREKOITU - Listaa hakukohteiden rikastetut perustiedot indeksistä"
           :query-params [oids :- (describe String "Pilkulla eroteltu lista hakukohteiden oideja")
                          {nimi :- (describe String "Suodata annetulla hakukohteen nimellä tai oidilla") nil}
                          {muokkaaja :- (describe String "Suodata annetulla muokkaajan nimellä tai oidilla") nil}
