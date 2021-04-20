@@ -4,6 +4,7 @@
             [ring.mock.request :as mock]
             [kouta-indeksoija-service.fixture.kouta-indexer-fixture :as fixture]
             [kouta-index.test-tools :as tools]
+            [kouta-index.util.tools :refer [contains-many?]]
             [kouta-indeksoija-service.fixture.external-services :as mocks])
   (:import (java.net URLEncoder)))
 
@@ -40,25 +41,31 @@
 
 (deftest filtered-toteutus-list-test
 
-  (let [toteutusOid1 "1.2.246.562.17.0000001"
-        toteutusOid2 "1.2.246.562.17.0000002"
-        toteutusOid3 "1.2.246.562.17.0000003"
-        toteutusOid4 "1.2.246.562.17.0000004"
-        toteutusOid5 "1.2.246.562.17.0000005"]
+  (let [hakuOid1      "1.2.246.562.29.000001"
+        koulutusOid1  "1.2.246.562.13.000001"
+        toteutusOid1  "1.2.246.562.17.000001"
+        toteutusOid2  "1.2.246.562.17.000002"
+        toteutusOid3  "1.2.246.562.17.000003"
+        toteutusOid4  "1.2.246.562.17.000004"
+        toteutusOid5  "1.2.246.562.17.000005"
+        hakukohdeOid1 "1.2.246.562.20.000001"
+        hakukohdeOid2 "1.2.246.562.20.000002"
+        valintaperusteId1 "2d0651b7-cdd3-463b-80d9-303a60d9616c"]
 
     (defn toteutus-url
       ([oids] (str "/kouta-index/toteutus/filtered-list?oids=" oids))
       ([] (toteutus-url (str toteutusOid2 "," toteutusOid3 "," toteutusOid4 "," toteutusOid5))))
 
-    (fixture/add-toteutus-mock toteutusOid1 "1.2.246.562.13.0000001" :tila "julkaistu"   :nimi "Automaatioalan perusopinnot" :organisaatio mocks/Oppilaitos2)
-    (fixture/add-toteutus-mock toteutusOid2 "1.2.246.562.13.0000001" :tila "julkaistu"   :nimi "Automatiikan perusopinnot")
-    (fixture/add-toteutus-mock toteutusOid3 "1.2.246.562.13.0000001" :tila "julkaistu"   :nimi "Autoalan perusopinnot" :modified "2018-05-05T12:02:23" :muokkaaja "1.2.246.562.24.55555555555")
-    (fixture/add-toteutus-mock toteutusOid4 "1.2.246.562.13.0000001" :tila "arkistoitu"  :nimi "Autoalan perusopinnot" :modified "2018-06-05T12:02:23")
-    (fixture/add-toteutus-mock toteutusOid5 "1.2.246.562.13.0000001" :tila "tallennettu" :nimi "Autoalan perusopinnot" :modified "2018-06-05T12:02:23")
+    (fixture/add-toteutus-mock toteutusOid1 koulutusOid1 :tila "julkaistu"   :nimi "Automaatioalan perusopinnot" :organisaatio mocks/Oppilaitos1)
+    (fixture/add-toteutus-mock toteutusOid2 koulutusOid1 :tila "julkaistu"   :nimi "Automatiikan perusopinnot")
+    (fixture/add-toteutus-mock toteutusOid3 koulutusOid1 :tila "julkaistu"   :nimi "Autoalan perusopinnot" :modified "2018-05-05T12:02:23" :muokkaaja "1.2.246.562.24.55555555555")
+    (fixture/add-toteutus-mock toteutusOid4 koulutusOid1 :tila "arkistoitu"  :nimi "Autoalan perusopinnot" :modified "2018-06-05T12:02:23")
+    (fixture/add-toteutus-mock toteutusOid5 koulutusOid1 :tila "tallennettu" :nimi "Autoalan perusopinnot" :modified "2018-06-05T12:02:23")
 
-    ;(fixture/add-hakukohde-mock "1.2.246.562.20.0000001" toteutusOid4 "1.2.246.562.29.0000001" :tila "julkaistu" :nimi "Hakukohde")
-    ;(fixture/add-hakukohde-mock "1.2.246.562.20.0000002" toteutusOid5 "1.2.246.562.29.0000001" :tila "julkaistu" :nimi "Hakukohde")
-    ;(fixture/add-hakukohde-mock "1.2.246.562.20.0000003" toteutusOid5 "1.2.246.562.29.0000001" :tila "julkaistu" :nimi "Hakukohde")
+    (fixture/add-haku-mock hakuOid1 :tila "julkaistu" :organisaatio mocks/Oppilaitos1)
+
+    (fixture/add-hakukohde-mock hakukohdeOid1 toteutusOid1 hakuOid1 :tila "julkaistu" :nimi "Hakukohde" :organisaatio mocks/Oppilaitos1 :valintaperuste valintaperusteId1)
+    (fixture/add-hakukohde-mock hakukohdeOid2 toteutusOid1 hakuOid1 :tila "tallennettu" :nimi "Hakukohde" :organisaatio mocks/Oppilaitos1 :valintaperuste valintaperusteId1)
 
     (fixture/index-oids-without-related-indices {:toteutukset [toteutusOid1 toteutusOid2 toteutusOid3 toteutusOid4 toteutusOid5]})
 
@@ -128,6 +135,13 @@
         (let [oids (get-200-oids (str (toteutus-url) "&page=3&size=2&order-by=tila"))]
           (is (= [] oids)))))
 
+    (testing "Toteutus result contains hakutieto hakukohde organisaatio and tila"
+      (let [res (get-200 (str (toteutus-url toteutusOid1)))]
+        (is (= 1 (:totalCount res)))
+        (is (= 1 (-> res :result (first) :hakutiedot (count))))
+        (is (= 2 (-> res :result (first) :hakutiedot (first) :hakukohteet (count))))
+        (is (->>     res :result (first) :hakutiedot (first) :hakukohteet (every? #(contains-many? % :organisaatioOid :tila))))))
+
     (testing "Toteutus result contain proper fields"
       (let [res (get-200 (str (toteutus-url) "&nimi=" toteutusOid3))]
         (is (= 1 (:totalCount res)))
@@ -137,12 +151,13 @@
                   :tila "julkaistu"
                   :nimi { :fi "Autoalan perusopinnot fi"
                           :sv "Autoalan perusopinnot sv" }
-                  :organisaatio { :oid mocks/Oppilaitos1
+                  :organisaatio {:oid mocks/Oppilaitos1
                                  :nimi { :fi "Kiva ammattikorkeakoulu"
-                                        :sv "Kiva ammattikorkeakoulu sv" }
+                                         :sv "Kiva ammattikorkeakoulu sv" }
                                  :paikkakunta { :koodiUri "kunta_091"
                                                :nimi { :fi "kunta_091 nimi fi"
-                                                      :sv "kunta_091 nimi sv" }}}
-                  :muokkaaja { :oid "1.2.246.562.24.55555555555"
+                                                       :sv "kunta_091 nimi sv" }}}
+                  :organisaatiot ["1.2.246.562.10.54545454545" "1.2.246.562.10.67476956288" "1.2.246.562.10.594252633210"]
+                  :muokkaaja {:oid "1.2.246.562.24.55555555555"
                               :nimi muokkaaja }
                   :modified "2018-05-05T12:02:23"} toteutus)))))))
