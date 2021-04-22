@@ -13,6 +13,7 @@
   (let [base-query (->basic-oid-query oids)
         source-fields (conj default-source-fields
                             "metadata.eperuste"
+                            "toteutukset.oid"
                             "toteutukset.tila"
                             "toteutukset.organisaatiot")]
     (-> (search "koulutus-kouta-virkailija" source-fields base-query params)
