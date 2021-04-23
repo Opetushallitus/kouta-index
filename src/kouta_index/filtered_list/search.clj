@@ -100,7 +100,6 @@
   [index source-fields base-query {:keys [lng page size order-by order] :or {lng "fi" page 1 size 10 order-by "nimi" order "asc"} :as filters}]
   (let [source (vec source-fields)
         from (->from page size)
-        size (->size size)
         sort (->sort-array lng order-by order)
         query (->query (->lng lng) base-query filters)]
     (debug-pretty { :_source source :from from :size size :sort sort :query query})

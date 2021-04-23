@@ -15,12 +15,6 @@
   [page size]
   (if (pos? page) (* (- page 1) size) 0))
 
-(defn ->size
-  ([size default]
-   (if (pos? size) (if (< size default) size default) 0))
-  ([size]
-   (->size size 20)))
-
 (defn ->sort
   [field order]
   { (keyword field) { :order (->order order) :unmapped_type "string"} })
