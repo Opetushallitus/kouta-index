@@ -15,6 +15,9 @@
                             "metadata.eperuste"
                             "toteutukset.oid"
                             "toteutukset.tila"
+                            "toteutukset.modified"
+                            "toteutukset.nimi"
+                            "toteutukset.organisaatio"
                             "toteutukset.organisaatiot")]
     (-> (search "koulutus-kouta-virkailija" source-fields base-query params)
         (map-results (fn [koulutus] (-> koulutus
@@ -26,8 +29,11 @@
   (let [base-query (->basic-oid-query oids)
         source-fields (conj default-source-fields
                             "organisaatiot"
+                            "hakutiedot.hakukohteet.hakukohdeOid"
                             "hakutiedot.hakukohteet.tila"
-                            "hakutiedot.hakukohteet.organisaatioOid")]
+                            "hakutiedot.hakukohteet.modified"
+                            "hakutiedot.hakukohteet.nimi"
+                            "hakutiedot.hakukohteet.organisaatio")]
     (-> (search "toteutus-kouta-virkailija" source-fields base-query params)
         (map-results (fn [toteutus] (-> toteutus
                                         (#(assoc % :hakukohteet (->> (get % :hakutiedot [])
@@ -37,8 +43,14 @@
 
 (defn search-haut
   [oids params]
-  (let [base-query (->basic-oid-query oids)]
-    (search "haku-kouta-virkailija" default-source-fields base-query params)))
+  (let [base-query (->basic-oid-query oids)
+        source-fields (conj default-source-fields
+                            "hakukohteet.oid"
+                            "hakukohteet.tila"
+                            "hakukohteet.modified"
+                            "hakukohteet.nimi"
+                            "hakukohteet.organisaatio")]
+    (search "haku-kouta-virkailija" source-fields base-query params)))
 
 (defn search-hakukohteet
   [oids params]
