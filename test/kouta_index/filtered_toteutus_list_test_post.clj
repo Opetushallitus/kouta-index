@@ -135,7 +135,7 @@
       (testing "Toteutus result contains hakutieto hakukohde organisaatio and tila"
         (let [res (post-200 [toteutusOid1] "")
               hakukohteet-count (-> res :result (first) :hakukohteet (count))
-              has-organisaatio-and-tila (->> res :result (first) :hakukohteet (every? #(contains-many? % :organisaatioOid :tila)))]
+              has-organisaatio-and-tila (->> res :result (first) :hakukohteet (every? #(contains-many? % :organisaatio :tila)))]
           (is (= 1 (:totalCount res)))
           (is (= 2 hakukohteet-count))
           (is (true? has-organisaatio-and-tila))))

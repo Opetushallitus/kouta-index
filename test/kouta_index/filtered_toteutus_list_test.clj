@@ -135,14 +135,6 @@
         (let [oids (get-200-oids (str (toteutus-url) "&page=3&size=2&order-by=tila"))]
           (is (= [] oids)))))
 
-    (testing "Toteutus result contains hakutieto hakukohde organisaatio and tila"
-      (let [res (get-200 (str (toteutus-url toteutusOid1)))
-            hakukohteet-count (-> res :result (first) :hakukohteet (count))
-            has-organisaatio-and-tila (->> res :result (first) :hakukohteet (every? #(contains-many? % :organisaatioOid :tila)))]
-        (is (= 1 (:totalCount res)))
-        (is (= 2 hakukohteet-count))
-        (is (true? has-organisaatio-and-tila))))
-
     (testing "Toteutus result contain proper fields"
       (let [res (get-200 (str (toteutus-url) "&nimi=" toteutusOid3))]
         (is (= 1 (:totalCount res)))
