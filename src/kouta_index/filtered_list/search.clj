@@ -44,22 +44,22 @@
         (->match-query (str "nimi." (->lng lng)) nimi)))))
 
 (defn- ->muokkaaja-filter
-  [lng filters]
+  [filters]
   (when-let [muokkaaja (:muokkaaja filters)]
     (if (oid? muokkaaja)
       (->term-query :muokkaaja.oid muokkaaja)
       (->match-query :muokkaaja.nimi muokkaaja))))
 
 (defn- ->tila-filter
-  [lng filters]
+  [filters]
   (when-let [tila (:tila filters)]
     (->term-query :tila.keyword (->trimmed-lowercase tila))))
 
 (defn- ->filters
   [lng filters]
   (let [nimi      (->nimi-filter lng filters)
-        muokkaaja (->muokkaaja-filter lng filters)
-        tila      (->tila-filter lng filters)]
+        muokkaaja (->muokkaaja-filter filters)
+        tila      (->tila-filter filters)]
     (vec (remove nil? [nimi muokkaaja tila]))))
 
 (defn ->basic-oid-query
