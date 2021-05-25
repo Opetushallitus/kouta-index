@@ -34,6 +34,11 @@
   (let [defined? (fn [k] (not (nil? (k filters))))]
     (or (defined? :nimi) (defined? :muokkaaja) (defined? :tila) (not (:arkistoidut filters)))))
 
+(defn- create-nimi-query
+  [search-term]
+  {:should (->> ["fi" "sv" "en"]
+                (map #(->match-query (str "nimi." %) search-term)))})
+
 (defn- ->nimi-filter
   [lng filters]
   (when-let [nimi (:nimi filters)]
@@ -41,7 +46,7 @@
       (->term-query :oid.keyword nimi)
       (if (uuid? nimi)
         (->term-query :id.keyword nimi)
-        (->match-query (str "nimi." (->lng lng)) nimi)))))
+        (create-nimi-query nimi)))))
 
 (defn- ->muokkaaja-filter
   [filters]
