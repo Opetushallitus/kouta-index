@@ -40,7 +40,7 @@
                 (map #(->match-query (str "nimi." %) search-term)))})
 
 (defn- ->nimi-filter
-  [lng filters]
+  [filters]
   (when-let [nimi (:nimi filters)]
     (if (oid? nimi)
       (->term-query :oid.keyword nimi)
@@ -61,8 +61,8 @@
     (->term-query :tila.keyword (->trimmed-lowercase tila))))
 
 (defn- ->filters
-  [lng filters]
-  (let [nimi      (->nimi-filter lng filters)
+  [filters]
+  (let [nimi      (->nimi-filter filters)
         muokkaaja (->muokkaaja-filter filters)
         tila      (->tila-filter filters)]
     (vec (remove nil? [nimi muokkaaja tila]))))
@@ -76,16 +76,16 @@
   (->terms-query :id.keyword (vec ids)))
 
 (defn- ->query-with-filters
-  [lng base-query filters]
-  (let [filter-queries (->filters lng filters)]
+  [base-query filters]
+  (let [filter-queries (->filters filters)]
     {:bool (-> { :must base-query }
                (cond-> (false? (:arkistoidut filters)) (assoc :must_not (->term-query :tila.keyword "arkistoitu")))
                (cond-> (not-empty filter-queries) (assoc :filter filter-queries)))}))
 
 (defn- ->query
-  [lng base-query filters]
+  [base-query filters]
   (if (filters? filters)
-    (->query-with-filters lng base-query filters)
+    (->query-with-filters base-query filters)
     base-query))
 
 (defn- ->result
@@ -106,7 +106,7 @@
   (let [source (vec source-fields)
         from (->from page size)
         sort (->sort-array lng order-by order)
-        query (->query (->lng lng) base-query filters)]
+        query (->query base-query filters)]
     (debug-pretty { :_source source :from from :size size :sort sort :query query})
     (let [response (e/search index :_source source :from from :size size :sort sort :query query)]
       (->result response))))
