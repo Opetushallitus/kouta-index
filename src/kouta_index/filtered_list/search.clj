@@ -36,8 +36,8 @@
 
 (defn- create-nimi-query
   [search-term]
-  {:should (->> ["fi" "sv" "en"]
-                (map #(->match-query (str "nimi." %) search-term)))})
+  {:bool {:should (->> ["fi" "sv" "en"]
+                       (map #(->match-query (str "nimi." %) search-term)))}})
 
 (defn- ->nimi-filter
   [filters]
