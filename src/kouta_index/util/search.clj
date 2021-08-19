@@ -30,7 +30,3 @@
 (defn ->match-query
   [field value]
   { :match { (keyword field) value } })
-
-(defn ->match-all-query
-  [field value]
-  { :match { (keyword field) { :query value :operator "and"} } })

@@ -36,7 +36,7 @@
 
 (defn- create-nimi-query
   [search-term lng]
-  {:bool {:should (->match-all-query (str "nimi." lng) search-term)} })
+  {:wildcard  { (keyword (str "nimi." lng ".keyword")) (str "*" search-term "*") } })
 
 (defn- ->nimi-filter
   [filters]
