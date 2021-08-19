@@ -30,3 +30,7 @@
 (defn ->match-query
   [field value]
   { :match { (keyword field) value } })
+
+(defn ->match-phrase-query
+  [field value]
+  { :match_phrase { (keyword field) value } })
