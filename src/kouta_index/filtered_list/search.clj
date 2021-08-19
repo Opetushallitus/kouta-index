@@ -36,7 +36,7 @@
 
 (defn- create-nimi-query
   [search-term lng]
-  {:bool {:should (->match-query (str "nimi." lng) search-term)} :minimum_should_match "100%"})
+  {:bool {:should (->match-all-query (str "nimi." lng) search-term)} })
 
 (defn- ->nimi-filter
   [filters]
