@@ -35,9 +35,11 @@
     (or (defined? :nimi) (defined? :muokkaaja) (defined? :tila) (not (:arkistoidut filters)))))
 
 (defn- create-nimi-query
-  [search-term lng]
-  [{:bool {:should (->match-query (str "nimi." lng) search-term)}}
-   {:wildcard {(keyword (str "nimi." lng ".keyword")) (str "*" search-term "*")}}])
+  [search-term]
+  [{:bool {:should (->> ["fi" "sv" "en"]
+                        (map #(->match-query (str "nimi." %) search-term)))}}
+   {:bool {:should (->> ["fi" "sv" "en"]
+                        (map (fn [lng] {:wildcard {(keyword (str "nimi." lng ".keyword")) (str "*" search-term "*")}})))}}])
 
 (defn- ->nimi-filter
   [filters]
@@ -46,7 +48,7 @@
       (->term-query :oid.keyword nimi)
       (if (uuid? nimi)
         (->term-query :id.keyword nimi)
-        (create-nimi-query nimi (:lng filters))))))
+        (create-nimi-query nimi)))))
 
 (defn- ->muokkaaja-filter
   [filters]
