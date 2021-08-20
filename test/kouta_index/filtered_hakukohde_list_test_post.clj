@@ -50,7 +50,7 @@
         sorakuvausId      "31972648-ebb7-4185-ac64-31fa6b841e39"
         defaultOids       [hakukohdeOid2 hakukohdeOid3 hakukohdeOid4 hakukohdeOid5]]
 
-    (fixture/add-koulutus-mock "1.2.246.562.13.0000001" :tila "julkaistu" :nimi "Hauska koulutus" )
+    (fixture/add-koulutus-mock "1.2.246.562.13.0000001" :tila "julkaistu" :nimi "Hauska koulutus" :sorakuvausId sorakuvausId)
     (fixture/add-haku-mock "1.2.246.562.29.0000001" :tila "julkaistu"   :nimi "Yhteishaku")
 
     (fixture/add-toteutus-mock toteutusOid1 "1.2.246.562.13.0000001" :tila "julkaistu"   :nimi "Automaatioalan perusopinnot" :organisaatio mocks/Oppilaitos2 :tarjoajat mocks/Oppilaitos2)
@@ -66,7 +66,7 @@
     (fixture/add-hakukohde-mock hakukohdeOid5 toteutusOid5 "1.2.246.562.29.0000001" :tila "tallennettu" :nimi "Autoalan hakukohde" :valintaperuste valintaperusteId1 :modified "2018-06-05T12:02:23")
 
     (fixture/add-sorakuvaus-mock sorakuvausId :tila "julkaistu" :nimi "Kiva SORA-kuvaus")
-    (fixture/add-valintaperuste-mock valintaperusteId1 :tila "julkaistu" :nimi "Valintaperustekuvaus" :sorakuvaus sorakuvausId)
+    (fixture/add-valintaperuste-mock valintaperusteId1 :tila "julkaistu" :nimi "Valintaperustekuvaus")
 
     (fixture/index-oids-without-related-indices {:hakukohteet [hakukohdeOid1 hakukohdeOid2 hakukohdeOid3 hakukohdeOid4 hakukohdeOid5]})
 
@@ -132,7 +132,7 @@
 
     (testing "Hakukohde result contain proper fields"
       (let [res (post-200 defaultOids (str "?nimi=" hakukohdeOid3))]
-        (is (= 1 (:totalCount res)))
+        (is (= 1 (:value (:totalCount res))))
         (let [hakukohde (first (:result res))
               muokkaaja (:nimi (:muokkaaja hakukohde))]    ;TODO: muokkaajan nimi onr:stä / nimen mockaus
           (is (= {:oid hakukohdeOid3

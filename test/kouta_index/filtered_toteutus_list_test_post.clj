@@ -136,13 +136,13 @@
         (let [res (post-200 [toteutusOid1] "")
               hakukohteet-count (-> res :result (first) :hakukohteet (count))
               has-organisaatio-and-tila (->> res :result (first) :hakukohteet (every? #(contains-many? % :organisaatio :tila)))]
-          (is (= 1 (:totalCount res)))
+          (is (= 1 (:value (:totalCount res))))
           (is (= 2 hakukohteet-count))
           (is (true? has-organisaatio-and-tila))))
 
       (testing "Toteutus result contain proper fields"
         (let [res (post-200 defaultOids (str "?nimi=" toteutusOid3))]
-          (is (= 1 (:totalCount res)))
+          (is (= 1 (:value (:totalCount res))))
           (let [toteutus (first (:result res))
                 muokkaaja (:nimi (:muokkaaja toteutus))]    ;TODO: muokkaajan nimi onr:stä / nimen mockaus
             (is (= {:oid toteutusOid3

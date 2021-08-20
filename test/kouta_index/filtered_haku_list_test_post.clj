@@ -129,7 +129,7 @@
 
     (testing "haku result contain proper fields"
       (let [res (post-200 defaultOids (str "?nimi=" hakuOid3))]
-        (is (= 1 (:totalCount res)))
+        (is (= 1 (:value (:totalCount res))))
         (let [haku (first (:result res))
               muokkaaja (:nimi (:muokkaaja haku))]          ;TODO: muokkaajan nimi onr:stä / nimen mockaus
           (is (= {:oid          hakuOid3
