@@ -1,4 +1,4 @@
-(defproject kouta-index "0.1.1-SNAPSHOT"
+(defproject kouta-index "0.2.0-SNAPSHOT"
   :description "Kouta-index"
   :repositories [["oph-releases" "https://artifactory.opintopolku.fi/artifactory/oph-sade-release-local"]
                  ["oph-snapshots" "https://artifactory.opintopolku.fi/artifactory/oph-sade-snapshot-local"]
