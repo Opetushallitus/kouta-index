@@ -36,8 +36,10 @@
 
 (defn- create-nimi-query
   [search-term]
-  {:bool {:should (->> ["fi" "sv" "en"]
-                       (map #(->match-query (str "nimi." %) search-term)))}})
+  [{:bool {:should (->> ["fi" "sv" "en"]
+                        (map #(->match-query (str "nimi." %) search-term)))}}
+   {:bool {:should (->> ["fi" "sv" "en"]
+                        (map (fn [lng] {:wildcard {(keyword (str "nimi." lng ".keyword")) (str "*" search-term "*")}})))}}])
 
 (defn- ->nimi-filter
   [filters]
@@ -65,7 +67,7 @@
   (let [nimi      (->nimi-filter filters)
         muokkaaja (->muokkaaja-filter filters)
         tila      (->tila-filter filters)]
-    (vec (remove nil? [nimi muokkaaja tila]))))
+    (vec (remove nil? (flatten [nimi muokkaaja tila])))))
 
 (defn ->basic-oid-query
   [oids]
