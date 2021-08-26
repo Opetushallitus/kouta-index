@@ -126,7 +126,7 @@
 
     (testing "haku valintaperuste contain proper fields"
       (let [res (post-200 defaultIds (str "?nimi=" valintaperusteId3))]
-        (is (= 1 (:value (:totalCount res))))
+        (is (= 1 (:totalCount res)))
         (let [valintaperuste (first (:result res))
               muokkaaja (:nimi (:muokkaaja valintaperuste))]    ;TODO: muokkaajan nimi onr:stä / nimen mockaus
           (is (= {:id valintaperusteId3

@@ -137,7 +137,7 @@
 
     (testing "Toteutus result contain proper fields"
       (let [res (get-200 (str (toteutus-url) "&nimi=" toteutusOid3))]
-        (is (= 1 (:value (:totalCount res))))
+        (is (= 1 (:totalCount res)))
         (let [toteutus (first (:result res))
               muokkaaja (:nimi (:muokkaaja toteutus))]    ;TODO: muokkaajan nimi onr:stä / nimen mockaus
           (is (= {:oid toteutusOid3

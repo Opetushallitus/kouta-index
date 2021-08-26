@@ -130,7 +130,7 @@
 
     (testing "haku result contain proper fields"
       (let [res (get-200 (str (haku-url) "&nimi=" hakuOid3))]
-        (is (= 1 (:value (:totalCount  res))))
+        (is (= 1 (:totalCount res)))
         (let [haku (first (:result res))
               muokkaaja (:nimi (:muokkaaja haku))]    ;TODO: muokkaajan nimi onr:stä / nimen mockaus
           (is (= {:oid hakuOid3

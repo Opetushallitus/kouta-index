@@ -140,7 +140,7 @@
 
     (testing "Koulutus result contain proper fields"
       (let [res (get-200 (str (koulutus-url) "&nimi=" koulutusOid2))]
-        (is (= 1 (:value (:totalCount res))))
+        (is (= 1 (:totalCount res)))
         (let [koulutus (first (:result res))
               muokkaaja (:nimi (:muokkaaja koulutus))]    ;TODO: muokkaajan nimi onr:stä / nimen mockaus
           (is (= { :oid koulutusOid2
