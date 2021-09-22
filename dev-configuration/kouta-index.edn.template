@@ -1,5 +1,5 @@
 {
-    :elastic-url "{{kouta_index_elastic_url}}"
+    :elastic-url "{{kouta_index_elastic7_url}}"
     :elastic-timeout 120000
     :hosts { :virkailija-internal "http://{{host_virkailija}}" }
 }
