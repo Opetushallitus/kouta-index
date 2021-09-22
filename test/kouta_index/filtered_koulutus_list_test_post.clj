@@ -46,13 +46,16 @@
         koulutusOid3 "1.2.246.562.13.000003"
         koulutusOid4 "1.2.246.562.13.000004"
         koulutusOid5 "1.2.246.562.13.000005"
-        defaultOids  [koulutusOid2 koulutusOid3 koulutusOid4 koulutusOid5]]
+        defaultOids  [koulutusOid2 koulutusOid3 koulutusOid4 koulutusOid5]
+        sorakuvausId "31972648-ebb7-4185-ac64-31fa6b841e39"]
 
-    (fixture/add-koulutus-mock koulutusOid1 :tila "julkaistu" :nimi "Hauska koulutus" :organisaatio mocks/Oppilaitos2)
-    (fixture/add-koulutus-mock koulutusOid2 :tila "julkaistu" :nimi "Tietojenkäsittelytieteen perusopinnot" :modified "2018-05-05T12:02:23")
-    (fixture/add-koulutus-mock koulutusOid3 :tila "julkaistu" :nimi "Tietotekniikan perusopinnot" :muokkaaja "1.2.246.562.24.55555555555")
-    (fixture/add-koulutus-mock koulutusOid4 :tila "arkistoitu" :nimi "Tietojenkäsittelytieteen perusopinnot")
-    (fixture/add-koulutus-mock koulutusOid5 :tila "tallennettu" :nimi "Tietojenkäsittelytieteen perusopinnot")
+    (fixture/add-sorakuvaus-mock sorakuvausId :tila "julkaistu" :nimi "Kiva SORA-kuvaus")
+
+    (fixture/add-koulutus-mock koulutusOid1 :tila "julkaistu" :nimi "Hauska koulutus" :organisaatio mocks/Oppilaitos2 :sorakuvausId sorakuvausId)
+    (fixture/add-koulutus-mock koulutusOid2 :tila "julkaistu" :nimi "Tietojenkäsittelytieteen perusopinnot" :modified "2018-05-05T12:02:23" :sorakuvausId sorakuvausId)
+    (fixture/add-koulutus-mock koulutusOid3 :tila "julkaistu" :nimi "Tietotekniikan perusopinnot" :muokkaaja "1.2.246.562.24.55555555555" :sorakuvausId sorakuvausId)
+    (fixture/add-koulutus-mock koulutusOid4 :tila "arkistoitu" :nimi "Tietojenkäsittelytieteen perusopinnot" :sorakuvausId sorakuvausId)
+    (fixture/add-koulutus-mock koulutusOid5 :tila "tallennettu" :nimi "Tietojenkäsittelytieteen perusopinnot" :sorakuvausId sorakuvausId)
 
     ;(fixture/add-toteutus-mock "1.2.246.562.17.000001" koulutusOid2 :tila "julkaistu")
     ;(fixture/add-toteutus-mock "1.2.246.562.17.000002" koulutusOid2 :tila "julkaistu")

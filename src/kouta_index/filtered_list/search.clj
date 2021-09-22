@@ -97,7 +97,7 @@
         total (:total hits)
         result (vec (map #(-> % :_source) (:hits hits)))]
     (-> {}
-        (assoc :totalCount total)
+        (assoc :totalCount (:value total))
         (assoc :result result))))
 
 (defn search

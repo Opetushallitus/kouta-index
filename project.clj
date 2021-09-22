@@ -1,4 +1,4 @@
-(defproject kouta-index "0.1.1-SNAPSHOT"
+(defproject kouta-index "0.2.0-SNAPSHOT"
   :description "Kouta-index"
   :repositories [["oph-releases" "https://artifactory.opintopolku.fi/artifactory/oph-sade-release-local"]
                  ["oph-snapshots" "https://artifactory.opintopolku.fi/artifactory/oph-sade-snapshot-local"]
@@ -6,24 +6,24 @@
   :managed-dependencies [[org.flatland/ordered "1.5.7"]]
   :dependencies [[org.clojure/clojure "1.10.0"]
                  ; Rest + server
-                 [metosin/compojure-api "1.1.11"]
+                 [metosin/compojure-api "1.1.13"]
                  [compojure "1.6.1"]
                  [ring/ring-core "1.7.1"]
                  [ring/ring-jetty-adapter "1.7.1"]
                  [ring-cors "0.1.13"]
                  ; Logging
-                 [oph/clj-log "0.2.3-SNAPSHOT"]
-                 [org.clojure/tools.logging "0.4.1"]
-                 [org.apache.logging.log4j/log4j-api "2.11.1"]
-                 [org.apache.logging.log4j/log4j-core "2.11.1"]
-                 [org.apache.logging.log4j/log4j-slf4j-impl "2.11.1"]
+                 [oph/clj-log "0.3.1-SNAPSHOT" :exclusions [com.fasterxml.jackson.core/jackson-annotations]]
+                 [org.clojure/tools.logging "1.1.0"]
+                 [org.apache.logging.log4j/log4j-api "2.13.2"]
+                 [org.apache.logging.log4j/log4j-core "2.13.2"]
+                 [org.apache.logging.log4j/log4j-slf4j-impl "2.13.2"]
                  [clj-log4j2 "0.2.0"]
                  ; Configuration
                  [fi.vm.sade.java-utils/java-properties "0.1.0-SNAPSHOT"]
                  [environ "1.1.0"]
                  [cprop "0.1.13"]
                  ; Elasticsearch
-                 [oph/clj-elasticsearch "0.3.2-SNAPSHOT"]]
+                 [oph/clj-elasticsearch "0.3.3-SNAPSHOT"]]
   :ring {:handler kouta-index.api/app
          :init kouta-index.api/init
          ;:destroy kouta-index.core/destroy
@@ -35,11 +35,11 @@
             [lein-environ "1.1.0"]]
   :profiles {:dev {:plugins [[lein-cloverage "1.0.11" :exclusions [org.clojure/clojure]]]}
              :test {:dependencies [[ring/ring-mock "0.3.2"]
-                                   [kouta-indeksoija-service "6.1.0-SNAPSHOT"]
-                                   [fi.oph.kouta/kouta-backend "6.1.0-SNAPSHOT"]
-                                   [fi.oph.kouta/kouta-backend "6.1.0-SNAPSHOT" :classifier "tests"]
-                                   [fi.oph.kouta/kouta-common "2.2.0-SNAPSHOT" :classifier "tests"]
-                                   [oph/clj-test-utils "0.2.8-SNAPSHOT"]]
+                                   [kouta-indeksoija-service "9.0.1-SNAPSHOT"]
+                                   [fi.oph.kouta/kouta-backend "6.12.0-SNAPSHOT"]
+                                   [fi.oph.kouta/kouta-backend "6.12.0-SNAPSHOT" :classifier "tests"]
+                                   [fi.oph.kouta/kouta-common "2.3.0-SNAPSHOT" :classifier "tests"]
+                                   [oph/clj-test-utils "0.3.0-SNAPSHOT"]]
                     :injections [(require '[clj-test-utils.elasticsearch-docker-utils :as utils])
                                  (utils/global-docker-elastic-fixture)]}
              :ci-test {:dependencies [[ring/ring-mock "0.3.2"]] :jvm-opts ["-Dlog4j.configurationFile=test/resources/log4j2.properties" "-Dconf=ci-configuration/kouta-index.edn"]}
