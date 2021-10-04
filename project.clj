@@ -36,8 +36,8 @@
   :profiles {:dev {:plugins [[lein-cloverage "1.0.11" :exclusions [org.clojure/clojure]]]}
              :test {:dependencies [[ring/ring-mock "0.3.2"]
                                    [kouta-indeksoija-service "9.0.1-SNAPSHOT"]
-                                   [fi.oph.kouta/kouta-backend "6.12.0-SNAPSHOT"]
-                                   [fi.oph.kouta/kouta-backend "6.12.0-SNAPSHOT" :classifier "tests"]
+                                   [fi.oph.kouta/kouta-backend "6.14.1-SNAPSHOT"]
+                                   [fi.oph.kouta/kouta-backend "6.14.1-SNAPSHOT" :classifier "tests"]
                                    [fi.oph.kouta/kouta-common "2.3.0-SNAPSHOT" :classifier "tests"]
                                    [oph/clj-test-utils "0.3.0-SNAPSHOT"]]
                     :injections [(require '[clj-test-utils.elasticsearch-docker-utils :as utils])
