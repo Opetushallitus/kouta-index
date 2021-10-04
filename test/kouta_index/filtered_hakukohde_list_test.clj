@@ -70,11 +70,11 @@
     (fixture/add-hakukohde-mock hakukohdeOid4 toteutusOid5 "1.2.246.562.29.0000001" :tila "arkistoitu" :nimi "Autoalan hakukohde" :valintaperuste valintaperusteId1 :modified "2018-06-05T12:02:23")
     (fixture/add-hakukohde-mock hakukohdeOid5 toteutusOid5 "1.2.246.562.29.0000001" :tila "tallennettu" :nimi "Autoalan hakukohde" :valintaperuste valintaperusteId1 :modified "2018-06-05T12:02:23")
 
-    (fixture/add-koulutus-mock "1.2.246.562.13.0000001" :tila "julkaistu" :nimi "Hauska koulutus" )
+    (fixture/add-koulutus-mock "1.2.246.562.13.0000001" :tila "julkaistu" :nimi "Hauska koulutus" :sorakuvausId sorakuvausId)
     (fixture/add-haku-mock "1.2.246.562.29.0000001" :tila "julkaistu"   :nimi "Yhteishaku")
 
     (fixture/add-sorakuvaus-mock sorakuvausId :tila "julkaistu" :nimi "Kiva SORA-kuvaus")
-    (fixture/add-valintaperuste-mock valintaperusteId1 :tila "julkaistu" :nimi "Valintaperustekuvaus" :sorakuvaus sorakuvausId)
+    (fixture/add-valintaperuste-mock valintaperusteId1 :tila "julkaistu" :nimi "Valintaperustekuvaus")
 
     (fixture/index-oids-without-related-indices {:hakukohteet [hakukohdeOid1 hakukohdeOid2 hakukohdeOid3 hakukohdeOid4 hakukohdeOid5]})
 
