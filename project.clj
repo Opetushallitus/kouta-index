@@ -14,9 +14,9 @@
                  ; Logging
                  [oph/clj-log "0.3.1-SNAPSHOT" :exclusions [com.fasterxml.jackson.core/jackson-annotations]]
                  [org.clojure/tools.logging "1.1.0"]
-                 [org.apache.logging.log4j/log4j-api "2.15.0"]
-                 [org.apache.logging.log4j/log4j-core "2.15.0"]
-                 [org.apache.logging.log4j/log4j-slf4j-impl "2.15.0"]
+                 [org.apache.logging.log4j/log4j-api "2.16.0"]
+                 [org.apache.logging.log4j/log4j-core "2.16.0"]
+                 [org.apache.logging.log4j/log4j-slf4j-impl "2.16.0"]
                  [clj-log4j2 "0.3.0"]
                  ; Configuration
                  [fi.vm.sade.java-utils/java-properties "0.1.0-SNAPSHOT"]
