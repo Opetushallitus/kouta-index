@@ -4,10 +4,12 @@
             [clojure.java.shell :refer [sh]]
             [clj-elasticsearch.elastic-connect :as e]
             [clj-elasticsearch.elastic-utils :as e-utils]
+            [ring.mock.request :as mock]
             [kouta-index.rest.organisaatio]
             [cheshire.core :refer [parse-string]]
             [clojure.string :as string]
-            [clojure.walk :refer [keywordize-keys]]))
+            [clojure.walk :refer [keywordize-keys]])
+  (:import (java.net URLEncoder)))
 
 (defonce Oppilaitos1 "1.2.246.562.10.54545454545")
 (defonce Oppilaitos2 "1.2.246.562.10.55555555555")
@@ -53,12 +55,19 @@
 (defn reset-elastic []
   (e/delete-index "_all"))
 
+(defn elastic-empty? []
+  (let [url (e-utils/elastic-url "_all" "_count")
+        count (:count (e-utils/elastic-get url))]
+    (= count 0)))
+
 (defn prepare-elastic-test-data [& args]
   (let [e-host (string/replace e-utils/elastic-host #"127\.0\.0\.1|localhost" "host.docker.internal")]
-    (println "Importing elasticsearch dump...")
-    (let [p (sh "test/resources/load_elastic_dump.sh" e-host (str (if (:no-data args) "" "data,") "mapping,analyzer,alias,settings,template"))]
-      (println (:err p))
-      (println (:out p)))))
+      (println "Importing elasticsearch data...")
+    (if (elastic-empty?)
+      (let [p (sh "test/resources/load_elastic_dump.sh" e-host (str (if (:no-data args) "" "data,") "mapping,analyzer,alias,settings,template"))]
+        (println (:err p))
+        (println (:out p)))
+      (println "Elasticsearch not empty. Data already imported. Doing nothing."))))
 
 (defn prepare-empty-elastic-indices []
   (reset-elastic)
@@ -85,3 +94,33 @@
 (defn ->keywordized-json
   [string]
   (keywordize-keys (parse-string string)))
+
+(defn post-200
+  [entity-name oids params]
+  (let [url      (format "/kouta-index/%s/filtered-list%s" entity-name params)
+        response (app (-> (mock/request :post url)
+                          (mock/json-body oids)))]
+    (is (= (:status response) 200))
+    (->keywordized-json (slurp (:body response)))))
+
+(defn post-200-oids
+  ([entity-name oids params] (map #(:oid %) (:result (post-200 entity-name oids params))))
+  ([entity-name oids] (post-200-oids entity-name oids "")))
+
+(defn post-200-ids
+  ([entity-name ids params] (map #(:id %) (:result (post-200 entity-name ids params))))
+  ([entity-name ids] (post-200-ids entity-name ids "")))
+
+(defn with-empty-indices
+  [test]
+  (prepare-empty-elastic-indices)
+  (test))
+
+(defn with-elastic-dump
+  [test]
+  (prepare-elastic-test-data)
+  (test))
+
+(defn enc
+  [str]
+  (URLEncoder/encode str))
