@@ -6,7 +6,8 @@
     [clojure.tools.logging :as log]
     [cheshire.core :as cheshire]
     [clj-elasticsearch.elastic-connect :as e]
-    [kouta-index.util.logging :refer [debug-pretty]]))
+    [kouta-index.util.logging :refer [debug-pretty]]
+    [clojure.string :as str]))
 
 (defonce default-source-fields ["oid", "nimi", "tila", "muokkaaja", "modified", "organisaatio"])
 
@@ -32,7 +33,7 @@
 (defn- filters?
   [filters]
   (let [defined? (fn [k] (not (nil? (k filters))))]
-    (or (defined? :nimi) (defined? :muokkaaja) (defined? :tila) (not (:arkistoidut filters)))))
+    (or (defined? :nimi) (defined? :muokkaaja) (defined? :tila))))
 
 (defn- create-nimi-query
   [search-term]
@@ -59,8 +60,8 @@
 
 (defn- ->tila-filter
   [filters]
-  (when-let [tila (:tila filters)]
-    (->term-query :tila.keyword (->trimmed-lowercase tila))))
+  (when-let [tila-str (:tila filters)]
+    (->terms-query :tila.keyword (comma-separated-string->vec tila-str))))
 
 (defn- ->filters
   [filters]
@@ -81,7 +82,6 @@
   [base-query filters]
   (let [filter-queries (->filters filters)]
     {:bool (-> { :must base-query }
-               (cond-> (false? (:arkistoidut filters)) (assoc :must_not (->term-query :tila.keyword "arkistoitu")))
                (cond-> (not-empty filter-queries) (assoc :filter filter-queries)))}))
 
 (defn- ->query

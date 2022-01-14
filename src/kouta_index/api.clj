@@ -1,7 +1,6 @@
 (ns kouta-index.api
   (:require
     [kouta-index.config :refer [config]]
-    [kouta-index.util.tools :refer [comma-separated-string->vec]]
     [clj-log.access-log :refer [with-access-logging]]
     [compojure.api.sweet :refer :all]
     [ring.middleware.cors :refer [wrap-cors]]
@@ -40,8 +39,7 @@
           :summary "Listaa koulutusten rikastetut perustiedot indeksistä"
           :query-params [{nimi :- (describe String "Suodata annetulla koulutuksen nimellä tai oidilla") nil}
                          {muokkaaja :- (describe String "Suodata annetulla muokkaajan nimellä tai oidilla") nil}
-                         {tila :- (describe String "Suodata annetulla koulutuksen tilalla (julkaistu/tallennettu/arkistoitu)") nil}
-                         {arkistoidut :- (describe Boolean "Näytetäänkö arkistoidut koulutukset (false)") true}
+                         {tila :- (describe String "Suodata annetuilla koulutuksen tiloilla (julkaistu/tallennettu/arkistoitu/poistettu)") nil}
                          {page :- (describe Long "Sivunumero (1)") 1}
                          {size :- (describe Long "Sivun koko (10)") 10}
                          {lng :- (describe String "fi/sv/en (fi)") "fi"}
@@ -57,8 +55,7 @@
           :summary "Listaa toteutusten rikastetut perustiedot indeksistä"
           :query-params [{nimi :- (describe String "Suodata annetulla toteutuksen nimellä tai oidilla") nil}
                          {muokkaaja :- (describe String "Suodata annetulla muokkaajan nimellä tai oidilla") nil}
-                         {tila :- (describe String "Suodata annetulla toteutuksen tilalla (julkaistu/tallennettu/arkistoitu)") nil}
-                         {arkistoidut :- (describe Boolean "Näytetäänkö arkistoidut toteutukset (false)") true}
+                         {tila :- (describe String "Suodata annetulla toteutuksen tiloilla (julkaistu/tallennettu/arkistoitu/poistettu)") nil}
                          {page :- (describe Long "Sivunumero (1)") 1}
                          {size :- (describe Long "Sivun koko (10)") 10}
                          {lng :- (describe String "fi/sv/en (fi)") "fi"}
@@ -74,8 +71,7 @@
           :summary "Listaa hakujen rikastetut perustiedot indeksistä"
           :query-params [{nimi :- (describe String "Suodata annetulla haun nimellä tai oidilla") nil}
                          {muokkaaja :- (describe String "Suodata annetulla muokkaajan nimellä tai oidilla") nil}
-                         {tila :- (describe String "Suodata annetulla haun tilalla (julkaistu/tallennettu/arkistoitu)") nil}
-                         {arkistoidut :- (describe Boolean "Näytetäänkö arkistoidut haut (false)") true}
+                         {tila :- (describe String "Suodata annetulla haun tiloilla (julkaistu/tallennettu/arkistoitu/poistettu)") nil}
                          {page :- (describe Long "Sivunumero (1)") 1}
                          {size :- (describe Long "Sivun koko (10)") 10}
                          {lng :- (describe String "fi/sv/en (fi)") "fi"}
@@ -91,8 +87,7 @@
           :summary "Listaa valintaperusteiden rikastetut perustiedot indeksistä"
           :query-params [{nimi :- (describe String "Suodata annetulla valintaperusteen nimellä tai oidilla") nil}
                          {muokkaaja :- (describe String "Suodata annetulla muokkaajan nimellä tai oidilla") nil}
-                         {tila :- (describe String "Suodata annetulla valintaperusteen tilalla (julkaistu/tallennettu/arkistoitu)") nil}
-                         {arkistoidut :- (describe Boolean "Näytetäänkö arkistoidut valintaperusteet (false)") true}
+                         {tila :- (describe String "Suodata annetulla valintaperusteen tiloilla (julkaistu/tallennettu/arkistoitu/poistettu)") nil}
                          {page :- (describe Long "Sivunumero (1)") 1}
                          {size :- (describe Long "Sivun koko (10)") 10}
                          {lng :- (describe String "fi/sv/en (fi)") "fi"}
@@ -108,8 +103,7 @@
           :summary "Listaa hakukohteiden rikastetut perustiedot indeksistä"
           :query-params [{nimi :- (describe String "Suodata annetulla hakukohteen nimellä tai oidilla") nil}
                          {muokkaaja :- (describe String "Suodata annetulla muokkaajan nimellä tai oidilla") nil}
-                         {tila :- (describe String "Suodata annetulla haun tilalla (julkaistu/tallennettu/arkistoitu)") nil}
-                         {arkistoidut :- (describe Boolean "Näytetäänkö arkistoidut hakukohteet (false)") true}
+                         {tila :- (describe String "Suodata annetulla haun tiloilla (julkaistu/tallennettu/arkistoitu/poistettu)") nil}
                          {page :- (describe Long "Sivunumero (1)") 1}
                          {size :- (describe Long "Sivun koko (10)") 10}
                          {lng :- (describe String "fi/sv/en (fi)") "fi"}
