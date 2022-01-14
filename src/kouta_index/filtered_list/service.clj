@@ -11,6 +11,7 @@
   [oids params]
   (let [base-query (->basic-oid-query oids)
         source-fields (conj default-source-fields
+                            "julkinen",
                             "koulutustyyppi"
                             "metadata.eperuste"
                             "toteutukset.oid"
@@ -62,5 +63,5 @@
 (defn search-valintaperusteet
   [ids params]
   (let [base-query (->basic-id-query ids)
-        source-fields (conj (remove #(= % "oid") default-source-fields) "koulutustyyppi" "id")]
+        source-fields (conj (remove #(= % "oid") default-source-fields) "julkinen" "koulutustyyppi" "id")]
     (search "valintaperuste-kouta-virkailija" source-fields base-query params)))

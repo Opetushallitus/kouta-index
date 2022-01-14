@@ -6,8 +6,7 @@
     [clojure.tools.logging :as log]
     [cheshire.core :as cheshire]
     [clj-elasticsearch.elastic-connect :as e]
-    [kouta-index.util.logging :refer [debug-pretty]]
-    [clojure.string :as str]))
+    [kouta-index.util.logging :refer [debug-pretty]]))
 
 (defonce default-source-fields ["oid", "nimi", "tila", "muokkaaja", "modified", "organisaatio"])
 

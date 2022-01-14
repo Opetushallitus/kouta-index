@@ -113,7 +113,8 @@
               muokkaaja (:nimi (:muokkaaja koulutus))]    ;TODO: muokkaajan nimi onr:stä / nimen mockaus
           (is (= { :oid koulutusOid2
                    :tila "julkaistu"
-                  :koulutustyyppi "amm"
+                   :julkinen false
+                   :koulutustyyppi "amm"
                    :nimi { :fi "Tietojenkäsittelytieteen perusopinnot fi"
                            :sv "Tietojenkäsittelytieteen perusopinnot sv" }
                    :organisaatio { :oid Oppilaitos1
