@@ -71,10 +71,10 @@
           (is (= [valintaperusteId1 valintaperusteId2] oids)))
         (fixture/update-valintaperuste-mock valintaperusteId2 :julkinen "true")
         (fixture/index-oids-without-related-indices {:valintaperusteet [valintaperusteId2]}))
-      (testing "ei arkistoidut"
-        (let [ids (post-200-ids defaultIds "?arkistoidut=false")]
+      (testing "monella tilalla"
+        (let [ids (post-200-ids defaultIds "?tila=tallennettu,julkaistu")]
           (is (= [valintaperusteId3 valintaperusteId5 valintaperusteId2] ids))))
-      (testing "monella arvolla"
+      (testing "monella parametrilla"
         (let [ids (post-200-ids defaultIds "?tila=julkaistu&muokkaaja=1.2.246.562.24.55555555555")]
           (is (= [valintaperusteId3] ids)))))
 

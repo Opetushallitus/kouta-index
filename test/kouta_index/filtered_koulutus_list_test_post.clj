@@ -84,10 +84,10 @@
           (is (= [koulutusOid1 koulutusOid2] oids)))
         (fixture/update-koulutus-mock koulutusOid2 :julkinen "true")
         (fixture/index-oids-without-related-indices {:koulutukset [koulutusOid2]}))
-      (testing "ei arkistoidut"
-        (let [oids (post-200-oids defaultOids "?arkistoidut=false&order-by=tila")]
+      (testing "monella tilalla"
+        (let [oids (post-200-oids defaultOids "?tila=tallennettu,julkaistu&order-by=tila")]
           (is (= [koulutusOid2 koulutusOid3 koulutusOid5] oids))))
-      (testing "monella arvolla"
+      (testing "monella parametrilla"
         (let [oids (post-200-oids defaultOids "?tila=julkaistu&muokkaaja=1.2.246.562.24.55555555555")]
           (is (= [koulutusOid3] oids)))))
 

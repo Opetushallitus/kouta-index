@@ -79,10 +79,10 @@
       (testing "by tila"
         (let [oids (post-200-oids defaultOids "?tila=tallennettu")]
           (is (= [toteutusOid5] oids))))
-      (testing "ei arkistoidut"
-        (let [oids (post-200-oids defaultOids "?arkistoidut=false")]
+      (testing "monella tilalla"
+        (let [oids (post-200-oids defaultOids "?tila=tallennettu,julkaistu")]
           (is (= [toteutusOid3 toteutusOid5 toteutusOid2] oids))))
-      (testing "monella arvolla"
+      (testing "monella parametrilla"
         (let [oids (post-200-oids defaultOids "?tila=julkaistu&muokkaaja=1.2.246.562.24.55555555555")]
           (is (= [toteutusOid3] oids)))))
 
