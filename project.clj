@@ -34,13 +34,12 @@
   :plugins [[lein-ring "0.12.5"]
             [lein-environ "1.1.0"]]
   :profiles {:dev {:plugins [[lein-cloverage "1.0.11" :exclusions [org.clojure/clojure]]]}
-             :test {:dependencies [[ring/ring-mock "0.3.2"]
-                                   [kouta-indeksoija-service "9.0.1-SNAPSHOT"]
-                                   [fi.oph.kouta/kouta-backend "6.14.1-SNAPSHOT"]
-                                   [fi.oph.kouta/kouta-backend "6.14.1-SNAPSHOT" :classifier "tests"]
+             :test {:dependencies [[pjstadig/humane-test-output "0.11.0"]
                                    [fi.oph.kouta/kouta-common "2.3.0-SNAPSHOT" :classifier "tests"]
                                    [oph/clj-test-utils "0.3.0-SNAPSHOT"]]
-                    :injections [(require '[clj-test-utils.elasticsearch-docker-utils :as utils])
+                    :injections [(require 'pjstadig.humane-test-output)
+                                 (pjstadig.humane-test-output/activate!)
+                                 (require '[clj-test-utils.elasticsearch-docker-utils :as utils])
                                  (utils/global-docker-elastic-fixture)]}
              :ci-test {:dependencies [[ring/ring-mock "0.3.2"]] :jvm-opts ["-Dlog4j.configurationFile=test/resources/log4j2.properties" "-Dconf=ci-configuration/kouta-index.edn"]}
              :uberjar {:ring {:port 8080}}}
