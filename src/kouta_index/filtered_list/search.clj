@@ -34,7 +34,7 @@
 (defn- filters?
   [filters]
   (let [defined? (fn [k] (not (nil? (k filters))))]
-    (or (defined? :nimi) (defined? :muokkaaja) (defined? :tila))))
+    (or (defined? :nimi) (defined? :muokkaaja) (defined? :tila) (defined? :koulutustyyppi))))
 
 (defn- create-nimi-query
   [search-term]
