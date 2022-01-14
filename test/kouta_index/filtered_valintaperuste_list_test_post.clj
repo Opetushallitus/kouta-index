@@ -21,6 +21,7 @@
   ([ids] (post-200-ids ids "")))
 
 (deftest valintaperuste-list-empty-index-test
+  (prepare-empty-elastic-indices)
   (testing "search in empty index"
     (post-200-ids ["31972648-ebb7-4185-ac64-31fa6b841e34"]))
   (testing "search in empty index sort by nimi"

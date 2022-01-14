@@ -26,6 +26,7 @@
   ([oids] (post-200-oids oids "")))
 
 (deftest koulutus-list-empty-index-test
+  (prepare-empty-elastic-indices)
   (testing "search in empty index"
     (post-200-oids ["1.2.246.562.13.000001"] ""))
   (testing "search in empty index sort by nimi"
@@ -39,7 +40,6 @@
 
 (deftest filtered-koulutus-list-test
   (prepare-elastic-test-data)
-
     (testing "Filter koulutus"
       (testing "by organisaatio"
         (let [oids (post-200-oids [koulutusOid1])]

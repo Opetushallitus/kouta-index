@@ -1,7 +1,7 @@
 (ns kouta-index.test-tools
   (:require [clojure.test :refer :all]
             [kouta-index.api :refer :all]
-            [clojure.java.shell :as shell]
+            [clojure.java.shell :refer [sh]]
             [clj-elasticsearch.elastic-connect :as e]
             [clj-elasticsearch.elastic-utils :as e-utils]
             [kouta-index.rest.organisaatio]
@@ -53,12 +53,16 @@
 (defn reset-elastic []
   (e/delete-index "_all"))
 
-(defn prepare-elastic-test-data []
+(defn prepare-elastic-test-data [& args]
   (let [e-host (string/replace e-utils/elastic-host #"127\.0\.0\.1|localhost" "host.docker.internal")]
-    (println (:out (shell/sh "test/resources/load_elastic_dump.sh" e-utils/elastic-host )))))
+    (println "Importing elasticsearch dump...")
+    (let [p (sh "test/resources/load_elastic_dump.sh" e-host (str (if (:no-data args) "" "data,") "mapping,analyzer,alias,settings,template"))]
+      (println (:err p))
+      (println (:out p)))))
 
 (defn prepare-empty-elastic-indices []
-  (println (:out (shell/sh "multielasticdump" "--direction=load" "--input=./elastic_dump" (format "--output=%s" e-utils/elastic-host) "--includeType=mapping,analyzer,alias,settings,template"))))
+  (reset-elastic)
+  (prepare-elastic-test-data {:no-data true}))
 
 (defn mock-organisaatio
   [tests]

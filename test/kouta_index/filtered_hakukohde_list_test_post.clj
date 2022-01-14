@@ -21,6 +21,7 @@
   ([oids] (post-200-oids oids "")))
 
 (deftest hakukohde-list-empty-index-test
+  (prepare-empty-elastic-indices)
   (testing "search in empty index"
     (post-200-oids ["1.2.246.562.20.000001"] ""))
   (testing "search in empty index sort by nimi"

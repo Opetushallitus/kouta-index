@@ -22,6 +22,7 @@
   ([oids] (post-200-oids oids "")))
 
 (deftest toteutus-list-empty-index-test
+  (prepare-empty-elastic-indices)
   (testing "search in empty index"
     (post-200-oids ["1.2.246.562.17.000001"]))
   (testing "search in empty index sort by nimi"
