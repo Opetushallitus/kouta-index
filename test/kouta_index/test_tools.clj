@@ -19,6 +19,7 @@
 (defonce koulutusOid3 "1.2.246.562.13.000003")
 (defonce koulutusOid4 "1.2.246.562.13.000004")
 (defonce koulutusOid5 "1.2.246.562.13.000005")
+(defonce yoKoulutusOid1 "1.2.246.562.13.000006")
 (defonce defaultKoulutusOids  [koulutusOid2 koulutusOid3 koulutusOid4 koulutusOid5])
 
 (defonce sorakuvausId "31972648-ebb7-4185-ac64-31fa6b841e39")

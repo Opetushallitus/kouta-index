@@ -14,7 +14,10 @@
         (is (= [koulutusOid1] oids))))
     (testing "by oid"
       (let [oids (post-200-oids "koulutus" defaultKoulutusOids (str "?nimi=" koulutusOid2))]
-        (is (= [koulutusOid2] oids))))
+        (is (= [koulutusOid2] oids)
+    (testing "by koulutustyyppi"
+      (let [oids (post-200-oids "koulutus" (conj defaultKoulutusOids yoKoulutusOid1) "?koulutustyyppi=yo")]
+        (is (= [yoKoulutusOid1] oids)))))))
     (testing "by muokkaajan oid"
       (let [oids (post-200-oids "koulutus" defaultKoulutusOids "?muokkaaja=1.2.246.562.24.55555555555")]
         (is (= [koulutusOid3] oids))))
