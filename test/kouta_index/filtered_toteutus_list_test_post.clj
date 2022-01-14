@@ -147,6 +147,7 @@
                 muokkaaja (:nimi (:muokkaaja toteutus))]    ;TODO: muokkaajan nimi onr:stä / nimen mockaus
             (is (= {:oid toteutusOid3
                     :tila "julkaistu"
+                    :koulutustyyppi "amm"
                     :nimi { :fi "Autoalan perusopinnot fi"
                            :sv "Autoalan perusopinnot sv" }
                     :organisaatio {:oid mocks/Oppilaitos1

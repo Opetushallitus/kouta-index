@@ -4,7 +4,8 @@
             [ring.mock.request :as mock]
             [kouta-indeksoija-service.fixture.kouta-indexer-fixture :as fixture]
             [kouta-index.test-tools :as tools]
-            [kouta-indeksoija-service.fixture.external-services :as mocks]))
+            [kouta-indeksoija-service.fixture.external-services :as mocks]
+            [cheshire.core :as cheshire]))
 
 (intern 'clj-log.access-log 'service "kouta-index")
 
@@ -59,11 +60,11 @@
     (fixture/add-toteutus-mock toteutusOid4 "1.2.246.562.13.0000001" :tila "arkistoitu"  :nimi "Autoalan perusopinnot" :modified "2018-06-05T12:02:23")
     (fixture/add-toteutus-mock toteutusOid5 "1.2.246.562.13.0000001" :tila "tallennettu" :nimi "Autoalan perusopinnot" :modified "2018-06-05T12:02:23")
 
-    (fixture/add-hakukohde-mock hakukohdeOid1 toteutusOid1 "1.2.246.562.29.0000001" :tila "julkaistu" :nimi "Hakukohde" :valintaperuste valintaperusteId1 :organisaatio mocks/Oppilaitos2)
-    (fixture/add-hakukohde-mock hakukohdeOid2 toteutusOid4 "1.2.246.562.29.0000001" :tila "julkaistu" :nimi "Hakukohde" :valintaperuste valintaperusteId1)
-    (fixture/add-hakukohde-mock hakukohdeOid3 toteutusOid2 "1.2.246.562.29.0000001" :tila "julkaistu" :nimi "autoalan hakukohde" :valintaperuste valintaperusteId1 :modified "2018-05-05T12:02:23" :muokkaaja "1.2.246.562.24.55555555555")
-    (fixture/add-hakukohde-mock hakukohdeOid4 toteutusOid5 "1.2.246.562.29.0000001" :tila "arkistoitu" :nimi "Autoalan hakukohde" :valintaperuste valintaperusteId1 :modified "2018-06-05T12:02:23")
-    (fixture/add-hakukohde-mock hakukohdeOid5 toteutusOid5 "1.2.246.562.29.0000001" :tila "tallennettu" :nimi "Autoalan hakukohde" :valintaperuste valintaperusteId1 :modified "2018-06-05T12:02:23")
+    (fixture/add-hakukohde-mock hakukohdeOid1 toteutusOid1 "1.2.246.562.29.0000001" :tila "julkaistu" :esitysnimi "Hakukohde" :valintaperuste valintaperusteId1 :organisaatio mocks/Oppilaitos2)
+    (fixture/add-hakukohde-mock hakukohdeOid2 toteutusOid4 "1.2.246.562.29.0000001" :tila "julkaistu" :esitysnimi "Hakukohde" :valintaperuste valintaperusteId1)
+    (fixture/add-hakukohde-mock hakukohdeOid3 toteutusOid2 "1.2.246.562.29.0000001" :tila "julkaistu" :esitysnimi "autoalan hakukohde" :valintaperuste valintaperusteId1 :modified "2018-05-05T12:02:23" :muokkaaja "1.2.246.562.24.55555555555" :_enrichedData (cheshire/generate-string {}))
+    (fixture/add-hakukohde-mock hakukohdeOid4 toteutusOid5 "1.2.246.562.29.0000001" :tila "arkistoitu" :esitysnimi "Autoalan hakukohde" :valintaperuste valintaperusteId1 :modified "2018-06-05T12:02:23")
+    (fixture/add-hakukohde-mock hakukohdeOid5 toteutusOid5 "1.2.246.562.29.0000001" :tila "tallennettu" :esitysnimi "Autoalan hakukohde" :valintaperuste valintaperusteId1 :modified "2018-06-05T12:02:23")
 
     (fixture/add-sorakuvaus-mock sorakuvausId :tila "julkaistu" :nimi "Kiva SORA-kuvaus")
     (fixture/add-valintaperuste-mock valintaperusteId1 :tila "julkaistu" :nimi "Valintaperustekuvaus")
@@ -137,14 +138,15 @@
               muokkaaja (:nimi (:muokkaaja hakukohde))]    ;TODO: muokkaajan nimi onr:stä / nimen mockaus
           (is (= {:oid hakukohdeOid3
                   :tila "julkaistu"
-                  :nimi { :fi "autoalan hakukohde fi"
-                         :sv "autoalan hakukohde sv" }
-                  :organisaatio { :oid mocks/Oppilaitos1
-                                 :nimi { :fi "Kiva ammattikorkeakoulu"
-                                        :sv "Kiva ammattikorkeakoulu sv" }
-                                 :paikkakunta { :koodiUri "kunta_091"
-                                               :nimi { :fi "kunta_091 nimi fi"
-                                                      :sv "kunta_091 nimi sv" }}}
-                  :muokkaaja { :oid "1.2.246.562.24.55555555555"
-                              :nimi muokkaaja }
+                  :koulutustyyppi "amm"
+                  :nimi {:fi "autoalan hakukohde fi"
+                         :sv "autoalan hakukohde sv"}
+                  :organisaatio {:oid mocks/Oppilaitos1
+                                 :nimi {:fi "Kiva ammattikorkeakoulu"
+                                        :sv "Kiva ammattikorkeakoulu sv"}
+                                 :paikkakunta {:koodiUri "kunta_091"
+                                               :nimi {:fi "kunta_091 nimi fi"
+                                                      :sv "kunta_091 nimi sv"}}}
+                  :muokkaaja {:oid "1.2.246.562.24.55555555555"
+                              :nimi muokkaaja}
                   :modified "2018-05-05T12:02:23"} hakukohde)))))))

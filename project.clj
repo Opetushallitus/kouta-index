@@ -35,6 +35,10 @@
             [lein-environ "1.1.0"]]
   :profiles {:dev {:plugins [[lein-cloverage "1.0.11" :exclusions [org.clojure/clojure]]]}
              :test {:dependencies [[pjstadig/humane-test-output "0.11.0"]
+                                   [ring/ring-mock "0.3.2"]
+                                   [kouta-indeksoija-service "9.2.0-SNAPSHOT"]
+                                   [fi.oph.kouta/kouta-backend "6.20.2-SNAPSHOT"]
+                                   [fi.oph.kouta/kouta-backend "6.20.2-SNAPSHOT" :classifier "tests"]
                                    [fi.oph.kouta/kouta-common "2.3.0-SNAPSHOT" :classifier "tests"]
                                    [oph/clj-test-utils "0.3.0-SNAPSHOT"]]
                     :injections [(require 'pjstadig.humane-test-output)

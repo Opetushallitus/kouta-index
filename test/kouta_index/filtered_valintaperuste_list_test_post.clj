@@ -131,6 +131,7 @@
               muokkaaja (:nimi (:muokkaaja valintaperuste))]    ;TODO: muokkaajan nimi onr:stä / nimen mockaus
           (is (= {:id valintaperusteId3
                   :tila "julkaistu"
+                  :koulutustyyppi "amm"
                   :nimi { :fi "Kiva valintaperustekuvaus fi"
                           :sv "Kiva valintaperustekuvaus sv" }
                   :organisaatio { :oid mocks/Oppilaitos1
