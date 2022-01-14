@@ -38,8 +38,9 @@
         (POST "/filtered-list" [:as request]
           :summary "Listaa koulutusten rikastetut perustiedot indeksistä"
           :query-params [{nimi :- (describe String "Suodata annetulla koulutuksen nimellä tai oidilla") nil}
+                         {koulutustyyppi :- (describe String "Suodata pilkulla erotetuilla koulutustyypeillä") nil}
                          {muokkaaja :- (describe String "Suodata annetulla muokkaajan nimellä tai oidilla") nil}
-                         {tila :- (describe String "Suodata annetuilla koulutuksen tiloilla (julkaistu/tallennettu/arkistoitu/poistettu)") nil}
+                         {tila :- (describe String "Suodata polkulla erotetuilla koulutuksen tiloilla (julkaistu/tallennettu/arkistoitu/poistettu)") nil}
                          {page :- (describe Long "Sivunumero (1)") 1}
                          {size :- (describe Long "Sivun koko (10)") 10}
                          {lng :- (describe String "fi/sv/en (fi)") "fi"}
@@ -54,6 +55,7 @@
         (POST "/filtered-list" [:as request]
           :summary "Listaa toteutusten rikastetut perustiedot indeksistä"
           :query-params [{nimi :- (describe String "Suodata annetulla toteutuksen nimellä tai oidilla") nil}
+                         {koulutustyyppi :- (describe String "Suodata pilkulla erotetuilla koulutustyypeillä") nil}
                          {muokkaaja :- (describe String "Suodata annetulla muokkaajan nimellä tai oidilla") nil}
                          {tila :- (describe String "Suodata annetulla toteutuksen tiloilla (julkaistu/tallennettu/arkistoitu/poistettu)") nil}
                          {page :- (describe Long "Sivunumero (1)") 1}
@@ -86,6 +88,7 @@
         (POST "/filtered-list" [:as request]
           :summary "Listaa valintaperusteiden rikastetut perustiedot indeksistä"
           :query-params [{nimi :- (describe String "Suodata annetulla valintaperusteen nimellä tai oidilla") nil}
+                         {koulutustyyppi :- (describe String "Suodata pilkulla erotetuilla koulutustyypeillä") nil}
                          {muokkaaja :- (describe String "Suodata annetulla muokkaajan nimellä tai oidilla") nil}
                          {tila :- (describe String "Suodata annetulla valintaperusteen tiloilla (julkaistu/tallennettu/arkistoitu/poistettu)") nil}
                          {page :- (describe Long "Sivunumero (1)") 1}
@@ -102,6 +105,7 @@
         (POST "/filtered-list" [:as request]
           :summary "Listaa hakukohteiden rikastetut perustiedot indeksistä"
           :query-params [{nimi :- (describe String "Suodata annetulla hakukohteen nimellä tai oidilla") nil}
+                         {koulutustyyppi :- (describe String "Suodata pilkulla erotetuilla koulutustyypeillä") nil}
                          {muokkaaja :- (describe String "Suodata annetulla muokkaajan nimellä tai oidilla") nil}
                          {tila :- (describe String "Suodata annetulla haun tiloilla (julkaistu/tallennettu/arkistoitu/poistettu)") nil}
                          {page :- (describe Long "Sivunumero (1)") 1}

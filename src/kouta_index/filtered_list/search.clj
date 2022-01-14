@@ -18,6 +18,7 @@
              "tila"        "tila.keyword"
              "muokkaaja"   "muokkaaja.nimi.keyword"
              "modified"    "modified"
+             "koulutustyyppi" "koulutustyyppi.keyword"
                            (str "nimi." (->lng lng) ".keyword"))))
 
 (defn- ->second-sort
@@ -63,12 +64,18 @@
   (when-let [tila-str (:tila filters)]
     (->terms-query :tila.keyword (comma-separated-string->vec tila-str))))
 
+(defn- ->koulutustyyppi-filter
+  [filters]
+  (when-let [koulutustyyppi-str (:koulutustyyppi filters)]
+    (->terms-query :koulutustyyppi.keyword (comma-separated-string->vec koulutustyyppi-str))))
+
 (defn- ->filters
   [filters]
   (let [nimi      (->nimi-filter filters)
         muokkaaja (->muokkaaja-filter filters)
-        tila      (->tila-filter filters)]
-    (vec (remove nil? (flatten [nimi muokkaaja tila])))))
+        tila      (->tila-filter filters)
+        koulutustyyppi (->koulutustyyppi-filter filters)]
+    (vec (remove nil? (flatten [nimi muokkaaja tila koulutustyyppi])))))
 
 (defn ->basic-oid-query
   [oids]
