@@ -17,7 +17,8 @@
              "tila"        "tila.keyword"
              "muokkaaja"   "muokkaaja.nimi.keyword"
              "modified"    "modified"
-             "koulutustyyppi" "koulutustyyppi.keyword"
+             "koulutustyyppi" "koulutustyyppi.keyword",
+             "julkinen"    "julkinen"
                            (str "nimi." (->lng lng) ".keyword"))))
 
 (defn- ->second-sort
