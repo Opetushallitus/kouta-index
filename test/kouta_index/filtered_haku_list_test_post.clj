@@ -2,7 +2,6 @@
   (:require [clojure.test :refer :all]
             [kouta-index.api :refer :all]
             [kouta-index.test-tools :refer :all]
-            ;[kouta-index.prepare-indexed-data :refer :all]
             ))
 
 (intern 'clj-log.access-log 'service "kouta-index")
