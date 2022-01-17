@@ -17,6 +17,8 @@
              "tila"        "tila.keyword"
              "muokkaaja"   "muokkaaja.nimi.keyword"
              "modified"    "modified"
+             "koulutustyyppi" "koulutustyyppi.keyword",
+             "julkinen"    "julkinen"
                            (str "nimi." (->lng lng) ".keyword"))))
 
 (defn- ->second-sort
@@ -32,7 +34,7 @@
 (defn- filters?
   [filters]
   (let [defined? (fn [k] (not (nil? (k filters))))]
-    (or (defined? :nimi) (defined? :muokkaaja) (defined? :tila) (not (:arkistoidut filters)))))
+    (or (defined? :nimi) (defined? :muokkaaja) (defined? :tila) (defined? :koulutustyyppi))))
 
 (defn- create-nimi-query
   [search-term]
@@ -59,15 +61,21 @@
 
 (defn- ->tila-filter
   [filters]
-  (when-let [tila (:tila filters)]
-    (->term-query :tila.keyword (->trimmed-lowercase tila))))
+  (when-let [tila-str (:tila filters)]
+    (->terms-query :tila.keyword (comma-separated-string->vec tila-str))))
+
+(defn- ->koulutustyyppi-filter
+  [filters]
+  (when-let [koulutustyyppi-str (:koulutustyyppi filters)]
+    (->terms-query :koulutustyyppi.keyword (comma-separated-string->vec koulutustyyppi-str))))
 
 (defn- ->filters
   [filters]
   (let [nimi      (->nimi-filter filters)
         muokkaaja (->muokkaaja-filter filters)
-        tila      (->tila-filter filters)]
-    (vec (remove nil? (flatten [nimi muokkaaja tila])))))
+        tila      (->tila-filter filters)
+        koulutustyyppi (->koulutustyyppi-filter filters)]
+    (vec (remove nil? (flatten [nimi muokkaaja tila koulutustyyppi])))))
 
 (defn ->basic-oid-query
   [oids]
@@ -81,7 +89,6 @@
   [base-query filters]
   (let [filter-queries (->filters filters)]
     {:bool (-> { :must base-query }
-               (cond-> (false? (:arkistoidut filters)) (assoc :must_not (->term-query :tila.keyword "arkistoitu")))
                (cond-> (not-empty filter-queries) (assoc :filter filter-queries)))}))
 
 (defn- ->query
