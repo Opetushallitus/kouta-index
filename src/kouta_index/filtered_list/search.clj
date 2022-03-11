@@ -34,7 +34,11 @@
 (defn- filters?
   [filters]
   (let [defined? (fn [k] (not (nil? (k filters))))]
-    (or (defined? :nimi) (defined? :muokkaaja) (defined? :tila) (defined? :koulutustyyppi))))
+    (or (defined? :nimi)
+        (defined? :muokkaaja)
+        (defined? :tila)
+        (defined? :koulutustyyppi)
+        (defined? :julkinen))))
 
 (defn- create-nimi-query
   [search-term]
@@ -69,13 +73,20 @@
   (when-let [koulutustyyppi-str (:koulutustyyppi filters)]
     (->terms-query :koulutustyyppi.keyword (comma-separated-string->vec koulutustyyppi-str))))
 
+(defn ->julkinen-filter
+  [filters]
+  (let [julkinen (filters :julkinen)]
+    (when (some? julkinen)
+      {:term {"julkinen" julkinen}})))
+
 (defn- ->filters
   [filters]
   (let [nimi      (->nimi-filter filters)
         muokkaaja (->muokkaaja-filter filters)
         tila      (->tila-filter filters)
-        koulutustyyppi (->koulutustyyppi-filter filters)]
-    (vec (remove nil? (flatten [nimi muokkaaja tila koulutustyyppi])))))
+        koulutustyyppi (->koulutustyyppi-filter filters)
+        julkinen  (->julkinen-filter filters)]
+    (vec (remove nil? (flatten [nimi muokkaaja tila koulutustyyppi julkinen])))))
 
 (defn ->basic-oid-query
   [oids]
@@ -112,6 +123,8 @@
 
 (defn search
   [index source-fields base-query {:keys [lng page size order-by order] :or {lng "fi" page 1 size 10 order-by "nimi" order "asc"} :as filters}]
+  (println "filters")
+  (println filters)
   (let [source (vec source-fields)
         from (->from page size)
         sort (->sort-array lng order-by order)

@@ -41,6 +41,7 @@
                         {koulutustyyppi :- (describe String "Suodata pilkulla erotetuilla koulutustyypeillä") nil}
                         {muokkaaja :- (describe String "Suodata annetulla muokkaajan nimellä tai oidilla") nil}
                         {tila :- (describe String "Suodata polkulla erotetuilla koulutuksen tiloilla (julkaistu/tallennettu/arkistoitu/poistettu)") nil}
+                        {julkinen :- (describe Boolean "Suodata koulutuksen julkinen-kentän arvolla (boolean)") nil}
                         {page :- (describe Long "Sivunumero (1)") 1}
                         {size :- (describe Long "Sivun koko (10)") 10}
                         {lng :- (describe String "fi/sv/en (fi)") "fi"}
