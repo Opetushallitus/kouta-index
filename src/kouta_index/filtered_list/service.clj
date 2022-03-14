@@ -47,6 +47,8 @@
   [oids params]
   (let [base-query (->basic-oid-query oids)
         source-fields (conj default-source-fields
+                            "hakutapa"
+                            "metadata.koulutuksenAlkamiskausi"
                             "hakukohteet.oid"
                             "hakukohteet.tila"
                             "hakukohteet.modified"
