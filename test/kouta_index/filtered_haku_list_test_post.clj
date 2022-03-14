@@ -80,16 +80,26 @@
       (is (= 1 (:totalCount res)))
       (let [haku (first (:result res))
             muokkaaja (:nimi (:muokkaaja haku))]          ;TODO: muokkaajan nimi onr:stä / nimen mockaus
-        (is (= {:oid          hakuOid3
-                :tila         "julkaistu"
-                :nimi         {:fi "Jatkuva haku fi"
-                               :sv "Jatkuva haku sv"}
-                :organisaatio {:oid         Oppilaitos1
-                               :nimi        {:fi "Kiva ammattikorkeakoulu"
-                                             :sv "Kiva ammattikorkeakoulu sv"}
+        (is (= {:oid hakuOid3
+                :tila "julkaistu"
+                :nimi {:fi "Jatkuva haku fi"
+                       :sv "Jatkuva haku sv"}
+                :organisaatio {:oid Oppilaitos1
+                               :nimi {:fi "Kiva ammattikorkeakoulu"
+                                      :sv "Kiva ammattikorkeakoulu sv"}
                                :paikkakunta {:koodiUri "kunta_091"
-                                             :nimi     {:fi "kunta_091 nimi fi"
-                                                        :sv "kunta_091 nimi sv"}}}
-                :muokkaaja    {:oid  "1.2.246.562.24.55555555555"
-                               :nimi muokkaaja}
-                :modified     "2018-05-05T12:02:23"} haku))))))
+                                             :nimi {:fi "kunta_091 nimi fi"
+                                                    :sv "kunta_091 nimi sv"}}}
+                :muokkaaja {:oid "1.2.246.562.24.55555555555"
+                            :nimi muokkaaja}
+                :modified "2018-05-05T12:02:23"
+                :koulutuksenAlkamiskausi
+                {:koulutuksenAlkamiskausi
+                 {:koodiUri "kausi_k#1"
+                  :nimi {:fi "kausi_k#1 nimi fi" :sv "kausi_k#1 nimi sv"}}
+                 :koulutuksenAlkamisvuosi "2021"
+                 :alkamiskausityyppi "alkamiskausi ja -vuosi"
+                 :henkilokohtaisenSuunnitelmanLisatiedot {}}
+                :hakutapa
+                {:koodiUri "hakutapa_03#1"
+                 :nimi {:fi "hakutapa_03#1 nimi fi" :sv "hakutapa_03#1 nimi sv"}}} haku))))))

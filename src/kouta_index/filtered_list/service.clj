@@ -47,12 +47,17 @@
   [oids params]
   (let [base-query (->basic-oid-query oids)
         source-fields (conj default-source-fields
+                            "hakutapa"
+                            "metadata.koulutuksenAlkamiskausi"
                             "hakukohteet.oid"
                             "hakukohteet.tila"
                             "hakukohteet.modified"
                             "hakukohteet.nimi"
                             "hakukohteet.organisaatio")]
-    (search "haku-kouta-virkailija" source-fields base-query params)))
+    (-> (search "haku-kouta-virkailija" source-fields base-query params)
+        (map-results (fn [haku] (-> haku
+                                    (#(assoc % :koulutuksenAlkamiskausi (get-in % [:metadata :koulutuksenAlkamiskausi])))
+                                    (dissoc :metadata)))))))
 
 (defn search-hakukohteet
   [oids params]
