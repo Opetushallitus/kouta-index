@@ -123,8 +123,6 @@
 
 (defn search
   [index source-fields base-query {:keys [lng page size order-by order] :or {lng "fi" page 1 size 10 order-by "nimi" order "asc"} :as filters}]
-  (println "filters")
-  (println filters)
   (let [source (vec source-fields)
         from (->from page size)
         sort (->sort-array lng order-by order)
