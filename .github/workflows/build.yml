@@ -1,0 +1,66 @@
+name: Kouta-index
+
+on:
+  workflow_dispatch:
+  push:
+    paths-ignore:
+      - '**.md'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Prepare clojure env
+        uses: ./.github/actions/prepare-clojure-env
+
+      - name: Run tests
+        run: lein ci-test
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Prepare clojure env
+        uses: ./.github/actions/prepare-clojure-env
+
+      - name: Build
+        run: lein uberjar
+
+      - uses: actions/cache@v2
+        id: restore-build
+        with:
+          path: target
+          key: ${{ github.sha }}
+
+  deploy:
+    needs: [test, build]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/cache@v2
+        id: restore-build
+        with:
+          path: target
+          key: ${{ github.sha }}
+
+      - name: Build and deploy Docker containers
+        shell: bash
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: |
+          git clone https://github.com/Opetushallitus/ci-tools.git
+          source ci-tools/common/setup-tools.sh
+
+          mv target/uberjar/kouta-index-*-standalone.jar $DOCKER_BUILD_DIR/artifact/kouta-index.jar
+          cp -vr oph-configuration $DOCKER_BUILD_DIR/config/
+
+          export BASE_IMAGE="baseimage-fatjar:master"
+          ./ci-tools/common/pull-image.sh
+          ./ci-tools/github-build/build-fatjar.sh kouta-index
+
+          ./ci-tools/github-build/upload-image.sh kouta-index
