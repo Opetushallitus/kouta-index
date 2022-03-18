@@ -27,7 +27,11 @@
         (is (= [hakuOid3 hakuOid5 hakuOid2] oids))))
     (testing "monella parametrilla"
       (let [oids (post-200-oids "haku" defaultHakuOids "?tila=julkaistu&muokkaaja=1.2.246.562.24.55555555555")]
-        (is (= [hakuOid3] oids)))))
+        (is (= [hakuOid3] oids))))
+    (testing "hakutavalla"
+      (let [oids (post-200-oids "haku" defaultHakuOids "?hakutapa=hakutapa_03#1")]
+        (is (= (sort defaultHakuOids) (sort oids)))))
+    )
 
   (testing "Sort haku result"
     (testing "by tila asc"
