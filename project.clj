@@ -23,7 +23,7 @@
                  [environ "1.1.0"]
                  [cprop "0.1.13"]
                  ; Elasticsearch
-                 [oph/clj-elasticsearch "0.4.0-SNAPSHOT"]]
+                 [oph/clj-elasticsearch "0.5.0-SNAPSHOT"]]
   :ring {:handler kouta-index.api/app
          :init kouta-index.api/init
          ;:destroy kouta-index.core/destroy
@@ -36,7 +36,7 @@
   :profiles {:dev {:plugins [[lein-cloverage "1.0.11" :exclusions [org.clojure/clojure]]]}
              :test {:dependencies [[pjstadig/humane-test-output "0.11.0"]
                                    [ring/ring-mock "0.3.2"]
-                                   [oph/clj-test-utils "0.3.0-SNAPSHOT"]]
+                                   [oph/clj-test-utils "0.5.0-SNAPSHOT"]]
                     :injections [(require 'pjstadig.humane-test-output)
                                  (pjstadig.humane-test-output/activate!)
                                  (require '[clj-test-utils.elasticsearch-docker-utils :as utils])
