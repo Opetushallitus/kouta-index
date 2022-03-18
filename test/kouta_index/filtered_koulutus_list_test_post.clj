@@ -29,7 +29,10 @@
         (is (= [koulutusOid2 koulutusOid3 koulutusOid5] oids))))
     (testing "monella parametrilla"
       (let [oids (post-200-oids "koulutus" defaultKoulutusOids "?tila=julkaistu&muokkaaja=1.2.246.562.24.55555555555")]
-        (is (= [koulutusOid3] oids)))))
+        (is (= [koulutusOid3] oids))))
+    (testing "by nakyvyys"
+      (let [oids (post-200-oids "koulutus" defaultKoulutusOids "?julkinen=true")]
+        (is (= [koulutusOid5] oids)))))
 
   (testing "Sort koulutus result"
     (testing "by tila asc"
