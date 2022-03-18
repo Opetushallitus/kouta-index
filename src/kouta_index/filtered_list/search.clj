@@ -73,7 +73,7 @@
 (defn- ->hakutapa-filter
   [filters]
   (when-let [hakutapa-str (:hakutapa filters)]
-    (->terms-query :hakutapa.koodiUri
+    (->terms-query :hakutapa.koodiUri.keyword
                    (comma-separated-string->vec
                      (clojure.string/replace hakutapa-str #"#\d+" "")))))
 
