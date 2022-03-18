@@ -34,7 +34,12 @@
 (defn- filters?
   [filters]
   (let [defined? (fn [k] (not (nil? (k filters))))]
-    (or (defined? :nimi) (defined? :muokkaaja) (defined? :tila) (defined? :koulutustyyppi))))
+    (or
+      (defined? :nimi)
+      (defined? :muokkaaja)
+      (defined? :tila)
+      (defined? :koulutustyyppi)
+      (defined? :hakutapa))))
 
 (defn- create-nimi-query
   [search-term]
@@ -64,6 +69,13 @@
   (when-let [tila-str (:tila filters)]
     (->terms-query :tila.keyword (comma-separated-string->vec tila-str))))
 
+(defn- ->hakutapa-filter
+  [filters]
+  (when-let [hakutapa-str (:hakutapa filters)]
+    (->terms-query :hakutapa.koodiUri.keyword
+                   (comma-separated-string->vec
+                     (clojure.string/replace hakutapa-str #"#\d+" "")))))
+
 (defn- ->koulutustyyppi-filter
   [filters]
   (when-let [koulutustyyppi-str (:koulutustyyppi filters)]
@@ -74,8 +86,9 @@
   (let [nimi      (->nimi-filter filters)
         muokkaaja (->muokkaaja-filter filters)
         tila      (->tila-filter filters)
-        koulutustyyppi (->koulutustyyppi-filter filters)]
-    (vec (remove nil? (flatten [nimi muokkaaja tila koulutustyyppi])))))
+        koulutustyyppi (->koulutustyyppi-filter filters)
+        hakutapa  (->hakutapa-filter filters)]
+    (vec (remove nil? (flatten [nimi muokkaaja tila koulutustyyppi hakutapa])))))
 
 (defn ->basic-oid-query
   [oids]

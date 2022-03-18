@@ -74,6 +74,7 @@
          :query-params [{nimi :- (describe String "Suodata annetulla haun nimellä tai oidilla") nil}
                         {muokkaaja :- (describe String "Suodata annetulla muokkaajan nimellä tai oidilla") nil}
                         {tila :- (describe String "Suodata annetulla haun tiloilla (julkaistu/tallennettu/arkistoitu/poistettu)") nil}
+                        {hakutapa :- (describe String "Suodata annetulla hakutapakoodiurilla") nil}
                         {page :- (describe Long "Sivunumero (1)") 1}
                         {size :- (describe Long "Sivun koko (10)") 10}
                         {lng :- (describe String "fi/sv/en (fi)") "fi"}
