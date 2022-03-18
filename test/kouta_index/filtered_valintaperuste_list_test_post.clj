@@ -31,8 +31,8 @@
       (let [ids (post-200-ids "valintaperuste" defaultValintaperusteIds "?tila=julkaistu&muokkaaja=1.2.246.562.24.55555555555")]
         (is (= [valintaperusteId3] ids))))
     (testing "by nakyvyys"
-      (let [ids (post-200-ids "valintaperuste" defaultValintaperusteIds "?julkinen=true")]
-        (is (= [valintaperusteId2] ids)))))
+      (let [ids (post-200-ids "valintaperuste" defaultValintaperusteIds "?julkinen=false")]
+        (= (sort defaultValintaperusteIds) (sort ids)))))
 
   (testing "Sort haku result"
     (testing "by tila asc"
