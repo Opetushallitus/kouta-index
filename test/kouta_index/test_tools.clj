@@ -61,13 +61,15 @@
         count (:count (e-utils/elastic-get url))]
     (= count 0)))
 
+
+(defn run-proc [proc-name & args]
+  (.waitFor (-> (ProcessBuilder. (into-array String (concat [proc-name] args))) .inheritIO .start)))
+
 (defn prepare-elastic-test-data [& args]
   (let [e-host (string/replace e-utils/elastic-host #"127\.0\.0\.1|localhost" "host.docker.internal")]
-      (println "Importing elasticsearch data...")
+    (println "Importing elasticsearch data...")
     (if (elastic-empty?)
-      (let [p (sh "test/resources/load_elastic_dump.sh" e-host (str (if (:no-data args) "" "data,") "mapping,analyzer,alias,settings,template"))]
-        (println (:err p))
-        (println (:out p)))
+      (run-proc "test/resources/load_elastic_dump.sh" e-host (str "mapping,alias,settings,template" (if (:no-data args) "" ",data")))
       (println "Elasticsearch not empty. Data already imported. Doing nothing."))))
 
 (defn prepare-empty-elastic-indices []
