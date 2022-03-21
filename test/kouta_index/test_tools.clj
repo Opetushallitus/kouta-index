@@ -4,6 +4,7 @@
             [clojure.java.shell :refer [sh]]
             [clj-elasticsearch.elastic-connect :as e]
             [clj-elasticsearch.elastic-utils :as e-utils]
+            [clj-test-utils.generic :refer [run-proc]]
             [ring.mock.request :as mock]
             [kouta-index.rest.organisaatio]
             [cheshire.core :refer [parse-string]]
@@ -56,18 +57,11 @@
 (defn reset-elastic []
   (e/delete-index "_all"))
 
-(defn elastic-empty? []
-  (let [url (e-utils/elastic-url "_all" "_count")
-        count (:count (e-utils/elastic-get url))]
-    (= count 0)))
-
 (defn prepare-elastic-test-data [& args]
   (let [e-host (string/replace e-utils/elastic-host #"127\.0\.0\.1|localhost" "host.docker.internal")]
-      (println "Importing elasticsearch data...")
-    (if (elastic-empty?)
-      (let [p (sh "test/resources/load_elastic_dump.sh" e-host (str (if (:no-data args) "" "data,") "mapping,analyzer,alias,settings,template"))]
-        (println (:err p))
-        (println (:out p)))
+    (println "Importing elasticsearch data...")
+    (if (e-utils/elastic-empty?)
+      (run-proc "test/resources/load_elastic_dump.sh" e-host (str "mapping,alias,settings,template" (if (:no-data args) "" ",data")))
       (println "Elasticsearch not empty. Data already imported. Doing nothing."))))
 
 (defn prepare-empty-elastic-indices []
