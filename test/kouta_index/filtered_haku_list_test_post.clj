@@ -28,9 +28,9 @@
     (testing "monella parametrilla"
       (let [oids (post-200-oids "haku" defaultHakuOids "?tila=julkaistu&muokkaaja=1.2.246.562.24.55555555555")]
         (is (= [hakuOid3] oids))))
-    (comment testing "hakutavalla"
-      (let [oids (post-200-oids "haku" defaultHakuOids "?hakutapa=hakutapa_03#1")]
-        (is (= (sort defaultHakuOids) (sort oids))))))
+    (testing "hakutavalla"
+      (let [oids (post-200-oids "haku" defaultHakuOids "?hakutapa=hakutapa_01#1")]
+        (is (= [hakuOid2] oids)))))
 
   (testing "Sort haku result"
     (testing "by tila asc"
@@ -100,9 +100,9 @@
                 {:koulutuksenAlkamiskausi
                  {:koodiUri "kausi_k#1"
                   :nimi {:fi "kausi_k#1 nimi fi" :sv "kausi_k#1 nimi sv"}}
-                 :koulutuksenAlkamisvuosi "2021"
+                 :koulutuksenAlkamisvuosi "2022"
                  :alkamiskausityyppi "alkamiskausi ja -vuosi"
                  :henkilokohtaisenSuunnitelmanLisatiedot {}}
                 :hakutapa
-                {:koodiUri "hakutapa_03#1"
-                 :nimi {:fi "hakutapa_03#1 nimi fi" :sv "hakutapa_03#1 nimi sv"}}} haku))))))
+                {:koodiUri "hakutapa_03"
+                 :nimi {:fi "hakutapa_03 nimi fi" :sv "hakutapa_03 nimi sv"}}} haku))))))
