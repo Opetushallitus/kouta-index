@@ -81,7 +81,7 @@
                         {page :- (describe Long "Sivunumero (1)") 1}
                         {size :- (describe Long "Sivun koko (10)") 10}
                         {lng :- (describe String "fi/sv/en (fi)") "fi"}
-                        {order-by :- (describe String "nimi/tila/muokkaaja/modified (nimi)") "nimi"}
+                        {order-by :- (describe String "nimi/tila/muokkaaja/modified/hakutapa/koulutuksenAlkamiskausi (nimi)") "nimi"}
                         {order :- (describe String "asc/desc (asc)") "asc"} :as params]
          :body [oids Oids]
          (with-access-logging request (ok (search-haut oids params)))))

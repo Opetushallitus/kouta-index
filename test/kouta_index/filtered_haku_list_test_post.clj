@@ -57,6 +57,18 @@
     (testing "by nimi desc"
       (let [oids (post-200-oids "haku" defaultHakuOids "?tila=julkaistu&order-by=nimi&order=desc")]
         (is (= [hakuOid2 hakuOid3] oids))))
+    (testing "by hakutapa asc"
+      (let [oids (post-200-oids "haku" defaultHakuOids "?order-by=hakutapa&order=asc")]
+        (is (= [hakuOid2 hakuOid4 hakuOid5 hakuOid3] oids))))
+    (testing "by hakutapa desc"
+      (let [oids (post-200-oids "haku" defaultHakuOids "?order-by=hakutapa&order=desc")]
+        (is (= [hakuOid5 hakuOid3 hakuOid4 hakuOid2] oids))))
+    (testing "by koulutuksenAlkamiskausi asc"
+      (let [oids (post-200-oids "haku" defaultHakuOids "?order-by=koulutuksenAlkamiskausi&order=asc")]
+        (is (= [hakuOid4 hakuOid5 hakuOid3 hakuOid2] oids))))
+    (testing "by koulutuksenAlkamiskausi desc"
+      (let [oids (post-200-oids "haku" defaultHakuOids "?order-by=koulutuksenAlkamiskausi&order=desc")]
+        (is (= [hakuOid2 hakuOid4 hakuOid5 hakuOid3] oids))))
     (comment testing "by hakukohde count asc"
              (let [oids (post-200-oids "haku" defaultHakuOids "?order-by=hakukohteet&order=asc")]
                (is (= [hakuOid4 hakuOid5 hakuOid2 hakuOid3] oids))))

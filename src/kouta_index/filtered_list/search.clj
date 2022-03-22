@@ -19,6 +19,8 @@
              "modified"    "modified"
              "koulutustyyppi" "koulutustyyppi.keyword",
              "julkinen"    "julkinen"
+             "hakutapa"    (str "hakutapa.nimi." (->lng lng) ".keyword")
+             "koulutuksenalkamiskausi" (str "metadata.koulutuksenAlkamiskausi.koulutuksenAlkamiskausi.nimi." (->lng lng) ".keyword")
                            (str "nimi." (->lng lng) ".keyword"))))
 
 (defn- ->second-sort
