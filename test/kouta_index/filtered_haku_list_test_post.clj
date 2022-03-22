@@ -30,6 +30,12 @@
         (is (= [hakuOid3] oids))))
     (testing "hakutavalla"
       (let [oids (post-200-oids "haku" defaultHakuOids "?hakutapa=hakutapa_01#1")]
+        (is (= [hakuOid2] oids))))
+    (testing "koulutuksen alkamisvuodella"
+      (let [oids (post-200-oids "haku" defaultHakuOids "?koulutuksenAlkamisvuosi=2020")]
+        (is (= [hakuOid2] oids))))
+    (testing "koulutuksen alkamiskaudella"
+      (let [oids (post-200-oids "haku" defaultHakuOids "?koulutuksenAlkamiskausi=kausi_s#1")]
         (is (= [hakuOid2] oids)))))
 
   (testing "Sort haku result"
@@ -98,8 +104,8 @@
                 :modified "2018-05-05T12:02:23"
                 :koulutuksenAlkamiskausi
                 {:koulutuksenAlkamiskausi
-                 {:koodiUri "kausi_k#1"
-                  :nimi {:fi "kausi_k#1 nimi fi" :sv "kausi_k#1 nimi sv"}}
+                 {:koodiUri "kausi_k"
+                  :nimi {:fi "kausi_k nimi fi" :sv "kausi_k nimi sv"}}
                  :koulutuksenAlkamisvuosi "2022"
                  :alkamiskausityyppi "alkamiskausi ja -vuosi"
                  :henkilokohtaisenSuunnitelmanLisatiedot {}}

@@ -76,6 +76,8 @@
                         {muokkaaja :- (describe String "Suodata annetulla muokkaajan nimellä tai oidilla") nil}
                         {tila :- (describe String "Suodata annetulla haun tiloilla (julkaistu/tallennettu/arkistoitu/poistettu)") nil}
                         {hakutapa :- (describe String "Suodata annetulla hakutapakoodiurilla") nil}
+                        {koulutuksenAlkamiskausi :- (describe String "Suodata koulutuksen alkamiskaudella") nil}
+                        {koulutuksenAlkamisvuosi :- (describe String "Suodata koulutuksen alkamisvuosilla") nil}
                         {page :- (describe Long "Sivunumero (1)") 1}
                         {size :- (describe Long "Sivun koko (10)") 10}
                         {lng :- (describe String "fi/sv/en (fi)") "fi"}

@@ -39,7 +39,9 @@
         (defined? :tila)
         (defined? :koulutustyyppi)
         (defined? :julkinen)
-        (defined? :hakutapa))))
+        (defined? :hakutapa)
+        (defined? :koulutuksenAlkamisvuosi)
+        (defined? :koulutuksenAlkamiskausi))))
 
 (defn- create-nimi-query
   [search-term]
@@ -76,6 +78,19 @@
                    (comma-separated-string->vec
                      (clojure.string/replace hakutapa-str #"#\d+" "")))))
 
+(defn- ->koulutuksen-alkamisvuosi-filter
+  [filters]
+  (when-let [koulutuksen-alkamisvuosi-str (:koulutuksenAlkamisvuosi filters)]
+    (->terms-query :metadata.koulutuksenAlkamiskausi.koulutuksenAlkamisvuosi.keyword
+                   (comma-separated-string->vec koulutuksen-alkamisvuosi-str))))
+
+(defn- ->koulutuksen-alkamiskausi-filter
+  [filters]
+  (when-let [koulutuksen-alkamiskausi-str (:koulutuksenAlkamiskausi filters)]
+    (->terms-query :metadata.koulutuksenAlkamiskausi.koulutuksenAlkamiskausi.koodiUri.keyword
+                   (comma-separated-string->vec
+                     (clojure.string/replace koulutuksen-alkamiskausi-str #"#\w+" "")))))
+
 (defn- ->koulutustyyppi-filter
   [filters]
   (when-let [koulutustyyppi-str (:koulutustyyppi filters)]
@@ -94,8 +109,17 @@
         tila      (->tila-filter filters)
         koulutustyyppi (->koulutustyyppi-filter filters)
         julkinen  (->julkinen-filter filters)
-        hakutapa  (->hakutapa-filter filters)]
-    (vec (remove nil? (flatten [nimi muokkaaja tila koulutustyyppi julkinen hakutapa])))))
+        hakutapa  (->hakutapa-filter filters)
+        koulutuksenAlkamisvuosi (->koulutuksen-alkamisvuosi-filter filters)
+        koulutuksenAlkamiskausi (->koulutuksen-alkamiskausi-filter filters)]
+    (vec (remove nil? (flatten
+                        [nimi
+                         muokkaaja
+                         tila koulutustyyppi
+                         julkinen
+                         hakutapa
+                         koulutuksenAlkamisvuosi
+                         koulutuksenAlkamiskausi])))))
 
 (defn ->basic-oid-query
   [oids]
