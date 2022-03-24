@@ -33,12 +33,15 @@
         (is (= [hakuOid2] oids))))
     (testing "koulutuksen alkamisvuodella"
       (let [oids (post-200-oids "haku" defaultHakuOids "?koulutuksenAlkamisvuosi=2020")]
-        (is (= [hakuOid2] oids))))
+        (is (= [hakuOid4 hakuOid2] oids))))
     (testing "koulutuksen alkamiskaudella"
       (let [oids (post-200-oids "haku" defaultHakuOids "?koulutuksenAlkamiskausi=kausi_s#1")]
         (is (= [hakuOid2] oids)))))
 
   (testing "Sort haku result"
+    (testing "without order-by"
+      (let [oids (post-200-oids "haku" defaultHakuOids)]
+        (is (= [hakuOid4 hakuOid3 hakuOid5 hakuOid2] oids))))
     (testing "by tila asc"
       (let [oids (post-200-oids "haku" defaultHakuOids "?order-by=tila&order=asc")]
         (is (= [hakuOid4 hakuOid3 hakuOid2 hakuOid5] oids))))

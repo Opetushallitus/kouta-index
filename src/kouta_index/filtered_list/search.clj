@@ -21,13 +21,16 @@
              "julkinen"    "julkinen"
              "hakutapa"    (str "hakutapa.nimi." (->lng lng) ".keyword")
              "koulutuksenalkamiskausi" (str "metadata.koulutuksenAlkamiskausi.koulutuksenAlkamiskausi.nimi." (->lng lng) ".keyword")
+             "koulutuksenalkamisvuosi" (str "metadata.koulutuksenAlkamiskausi.koulutuksenAlkamisvuosi.keyword")
                            (str "nimi." (->lng lng) ".keyword"))))
 
 (defn- ->second-sort
   [lng order-by]
   (if (and order-by (= "nimi" (->trimmed-lowercase order-by)))
     (->sort (->field-keyword lng "modified") "asc")
-    (->sort (->field-keyword lng "nimi") "asc")))
+    (if (and order-by (= order-by "koulutuksenAlkamiskausi"))
+      (->sort (->field-keyword lng "koulutuksenAlkamisvuosi") "asc")
+      (->sort (->field-keyword lng "nimi") "asc"))))
 
 (defn- ->sort-array
   [lng order-by order]
