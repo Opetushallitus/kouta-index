@@ -19,13 +19,18 @@
              "modified"    "modified"
              "koulutustyyppi" "koulutustyyppi.keyword",
              "julkinen"    "julkinen"
+             "hakutapa"    (str "hakutapa.nimi." (->lng lng) ".keyword")
+             "koulutuksenalkamiskausi" (str "metadata.koulutuksenAlkamiskausi.koulutuksenAlkamiskausi.nimi." (->lng lng) ".keyword")
+             "koulutuksenalkamisvuosi" (str "metadata.koulutuksenAlkamiskausi.koulutuksenAlkamisvuosi.keyword")
                            (str "nimi." (->lng lng) ".keyword"))))
 
 (defn- ->second-sort
   [lng order-by]
   (if (and order-by (= "nimi" (->trimmed-lowercase order-by)))
     (->sort (->field-keyword lng "modified") "asc")
-    (->sort (->field-keyword lng "nimi") "asc")))
+    (if (and order-by (= order-by "koulutuksenAlkamiskausi"))
+      (->sort (->field-keyword lng "koulutuksenAlkamisvuosi") "asc")
+      (->sort (->field-keyword lng "nimi") "asc"))))
 
 (defn- ->sort-array
   [lng order-by order]
@@ -38,7 +43,10 @@
         (defined? :muokkaaja)
         (defined? :tila)
         (defined? :koulutustyyppi)
-        (defined? :julkinen))))
+        (defined? :julkinen)
+        (defined? :hakutapa)
+        (defined? :koulutuksenAlkamisvuosi)
+        (defined? :koulutuksenAlkamiskausi))))
 
 (defn- create-nimi-query
   [search-term]
@@ -68,6 +76,26 @@
   (when-let [tila-str (:tila filters)]
     (->terms-query :tila.keyword (comma-separated-string->vec tila-str))))
 
+(defn- ->hakutapa-filter
+  [filters]
+  (when-let [hakutapa-str (:hakutapa filters)]
+    (->terms-query :hakutapa.koodiUri.keyword
+                   (comma-separated-string->vec
+                     (clojure.string/replace hakutapa-str #"#\d+" "")))))
+
+(defn- ->koulutuksen-alkamisvuosi-filter
+  [filters]
+  (when-let [koulutuksen-alkamisvuosi-str (:koulutuksenAlkamisvuosi filters)]
+    (->terms-query :metadata.koulutuksenAlkamiskausi.koulutuksenAlkamisvuosi.keyword
+                   (comma-separated-string->vec koulutuksen-alkamisvuosi-str))))
+
+(defn- ->koulutuksen-alkamiskausi-filter
+  [filters]
+  (when-let [koulutuksen-alkamiskausi-str (:koulutuksenAlkamiskausi filters)]
+    (->terms-query :metadata.koulutuksenAlkamiskausi.koulutuksenAlkamiskausi.koodiUri.keyword
+                   (comma-separated-string->vec
+                     (clojure.string/replace koulutuksen-alkamiskausi-str #"#\w+" "")))))
+
 (defn- ->koulutustyyppi-filter
   [filters]
   (when-let [koulutustyyppi-str (:koulutustyyppi filters)]
@@ -85,8 +113,18 @@
         muokkaaja (->muokkaaja-filter filters)
         tila      (->tila-filter filters)
         koulutustyyppi (->koulutustyyppi-filter filters)
-        julkinen  (->julkinen-filter filters)]
-    (vec (remove nil? (flatten [nimi muokkaaja tila koulutustyyppi julkinen])))))
+        julkinen  (->julkinen-filter filters)
+        hakutapa  (->hakutapa-filter filters)
+        koulutuksenAlkamisvuosi (->koulutuksen-alkamisvuosi-filter filters)
+        koulutuksenAlkamiskausi (->koulutuksen-alkamiskausi-filter filters)]
+    (vec (remove nil? (flatten
+                        [nimi
+                         muokkaaja
+                         tila koulutustyyppi
+                         julkinen
+                         hakutapa
+                         koulutuksenAlkamisvuosi
+                         koulutuksenAlkamiskausi])))))
 
 (defn ->basic-oid-query
   [oids]
