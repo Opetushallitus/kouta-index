@@ -86,4 +86,6 @@
                                                     :sv "kunta_091 nimi sv"}}}
                 :muokkaaja {:oid "1.2.246.562.24.55555555555"
                             :nimi muokkaaja}
-                :modified "2018-05-05T12:02:23"} hakukohde))))))
+                :modified "2018-05-05T12:02:23",
+                :hakuOid "1.2.246.562.29.0000001",
+                :toteutusOid "1.2.246.562.17.000002"} hakukohde))))))

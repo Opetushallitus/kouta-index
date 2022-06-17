@@ -62,7 +62,7 @@
 (defn search-hakukohteet
   [oids params]
   (let [base-query (->basic-oid-query oids)
-        source-fields (conj default-source-fields "koulutustyyppi")]
+        source-fields (conj default-source-fields "koulutustyyppi" "hakuOid" "toteutusOid")]
     (search "hakukohde-kouta-virkailija" source-fields base-query params)))
 
 (defn search-valintaperusteet
