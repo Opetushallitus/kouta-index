@@ -18,6 +18,9 @@
              "muokkaaja"   "muokkaaja.nimi.keyword"
              "modified"    "modified"
              "koulutustyyppi" "koulutustyyppi.keyword",
+             "hakuOid" "hakuOid.keyword"
+             "toteutusOid" "toteutusOid.keyword"
+             "orgWhitelist" "organisaatio.oid"
              "julkinen"    "julkinen"
              "hakutapa"    (str "hakutapa.nimi." (->lng lng) ".keyword")
              "koulutuksenalkamiskausi" (str "metadata.koulutuksenAlkamiskausi.koulutuksenAlkamiskausi.nimi." (->lng lng) ".keyword")
@@ -46,7 +49,10 @@
         (defined? :julkinen)
         (defined? :hakutapa)
         (defined? :koulutuksenAlkamisvuosi)
-        (defined? :koulutuksenAlkamiskausi))))
+        (defined? :koulutuksenAlkamiskausi)
+        (defined? :hakuOid)
+        (defined? :toteutusOid)
+        (defined? :orgWhitelist))))
 
 (defn- create-nimi-query
   [search-term]
@@ -70,6 +76,21 @@
     (if (oid? muokkaaja)
       (->term-query :muokkaaja.oid muokkaaja)
       (->match-query :muokkaaja.nimi muokkaaja))))
+
+(defn- ->hakuOid-filter
+  [filters]
+  (when-let [hakuOid (:hakuOid filters)]
+    (->term-query :hakuOid hakuOid)))
+
+(defn- ->toteutusOid-filter
+  [filters]
+  (when-let [toteutusOid (:toteutusOid filters)]
+    (->term-query :toteutusOid toteutusOid)))
+
+(defn- ->orgWhitelist-filter
+  [filters]
+  (when-let [orgWhitelist-str (:orgWhitelist filters)]
+    (->terms-query :organisaatio.oid (comma-separated-string->vec orgWhitelist-str))))
 
 (defn- ->tila-filter
   [filters]
@@ -116,7 +137,10 @@
         julkinen  (->julkinen-filter filters)
         hakutapa  (->hakutapa-filter filters)
         koulutuksenAlkamisvuosi (->koulutuksen-alkamisvuosi-filter filters)
-        koulutuksenAlkamiskausi (->koulutuksen-alkamiskausi-filter filters)]
+        koulutuksenAlkamiskausi (->koulutuksen-alkamiskausi-filter filters)
+        hakuOid (->hakuOid-filter filters)
+        toteutusOid (->toteutusOid-filter filters)
+        orgWhitelist (->orgWhitelist-filter filters)]
     (vec (remove nil? (flatten
                         [nimi
                          muokkaaja
@@ -124,7 +148,10 @@
                          julkinen
                          hakutapa
                          koulutuksenAlkamisvuosi
-                         koulutuksenAlkamiskausi])))))
+                         koulutuksenAlkamiskausi
+                         hakuOid
+                         toteutusOid
+                         orgWhitelist])))))
 
 (defn ->basic-oid-query
   [oids]

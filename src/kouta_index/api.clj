@@ -112,6 +112,9 @@
                         {koulutustyyppi :- (describe String "Suodata pilkulla erotetuilla koulutustyypeillä") nil}
                         {muokkaaja :- (describe String "Suodata annetulla muokkaajan nimellä tai oidilla") nil}
                         {tila :- (describe String "Suodata annetulla haun tiloilla (julkaistu/tallennettu/arkistoitu/poistettu)") nil}
+                        {hakuOid :- (describe String "Vain hakuun liitetyt hakukohteet (hakuOid)") nil}
+                        {toteutusOid :- (describe String "Vain toteutukseen liitetyt hakukohteet (toteutusOid)") nil}
+                        {orgWhitelist :- (describe String "Vain hakukohteet, joiden organisaatio tällä listalla (jos parametri annettu)") nil}
                         {page :- (describe Long "Sivunumero (1)") 1}
                         {size :- (describe Long "Sivun koko (10)") 10}
                         {lng :- (describe String "fi/sv/en (fi)") "fi"}
